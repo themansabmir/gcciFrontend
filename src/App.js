@@ -1,23 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import api from "./axiosInstance";
+import Sidebar from "./components/Sidebar/Sidebar";
+import Shipping from "./pages/Shipping/Shipping";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='flex  w-full'>
+      <BrowserRouter>
+        <div className='w-2/12'>
+          <Sidebar />
+        </div>
+        <div className='w-10/12 bg-mainBg'>
+          <Routes>
+            <Route path='/' index element={<Dashboard />} />
+            <Route path='shipping' element ={<Shipping />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
     </div>
   );
 }
