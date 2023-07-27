@@ -4,12 +4,20 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        mainBg: "#111827",
-        cardBg: "#1f2937",
-        primary: "#9ca3af",
-        font: "#988CFA",
-        secondaryFont: "#717FD1",
+        mainBg: "#f9fafd",
+        cardBg: "#ffffff",
+        sidebar: "#181818",
+       
+        font: "#25C935",
+        secondaryFont: "#080c0d",
         fields: "#374151",
+
+        text: "#080c0d",
+        background: "#f9fbfb",
+
+        secondary: "#dfd9c8",
+        accent: "#8a5160",
+        primary: "#25C935",
       },
     },
   },
