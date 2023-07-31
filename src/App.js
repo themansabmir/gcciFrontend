@@ -4,38 +4,45 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 
 import Sidebar from "./components/Sidebar/Sidebar";
 import User from "./pages/Master/User/User";
-import { MasterNavbar } from "./pages/Navbar/Navbar";
+import { MasterNavbar, ShipmentNavbar } from "./pages/Navbar/Navbar";
 import Customer from "./pages/Master/User/Customer";
 import Settings from "./pages/Settings/Settings";
 
  import { ToastContainer, toast } from "react-toastify";
  import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
+import MBL from "./pages/Shipment/MBL";
+import HBL from "./pages/Shipment/HBL";
+import ShipmentData from "./pages/Shipment/ShipmentData";
+import CreateShipment from "./pages/Shipment/CreateShipment";
+import Test from "./Test";
 
 function App() {
   const [expand, setExpand]= useState(true)
   return (
-    <div className='flex  w-full '>
+    <div className="flex">
       <BrowserRouter>
-        <div className={`w-2/12  top-0 mr-[0.5px] flex`}  >
-          <Sidebar expand={ expand} setExpand={setExpand} />
+        <div className={`w-2/12 top-0 mr-[0.5px] flex`}>
+          <Sidebar expand={expand} setExpand={setExpand} />
         </div>
-        <div className={`${expand?`w-10/12`:`w-full`} bg-mainBg`}>
+        <div className={`w-10/12 bg-mainBg`}>
           <Routes>
             <Route path='/' index element={<Dashboard />} />
 
-            <Route path='/masters' element={ <MasterNavbar />}>
+            <Route path='/masters' element={<MasterNavbar />}>
               <Route index element={<User />} />
               <Route path='users' element={<User />} />
-              <Route path="customers" element={ <Customer />} />
-
+              <Route path='customers' element={<Customer />} />
             </Route>
-            <Route path="/settings" element={<Settings />} >
-
+            <Route path='/shipment' element={<ShipmentNavbar />}>
+              <Route index element={<ShipmentData />} />
+              <Route path='createshipment' element={<CreateShipment />} />
+              {/* <Route path="hbl" element={<HBL />} /> */}
             </Route>
+            <Route path='/settings' element={<Settings />}></Route>
+            <Route path='/test' element={<Test />} />
           </Routes>
         </div>
-
       </BrowserRouter>
       <ToastContainer />
     </div>

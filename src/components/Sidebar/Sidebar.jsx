@@ -12,7 +12,7 @@ const Sidebar = ({expand, setExpand}) => {
   // const [expand, setExpand] = useState(false)
   return (
     <div
-      className={` relative w-full  left-0 top-0 bg-sidebar min-h-screen transition-all duration-500 ease-in  `}
+      className={` relative w-full   left-0 top-0 bg-sidebar min-h-screen transition-all duration-500 ease-in  `}
     >
       <h1 className='text-4xl  text-center font-bold mb-8 pb-4 pt-4 text-font '>
         GCCI PANEL

@@ -109,3 +109,27 @@ export const MasterNavbar = () => {
     </div>
   );
 };
+
+
+export const ShipmentNavbar = () => {
+  return (
+    <div>
+      <div className='w-full bg-sidebar'>
+        <nav className='flex justify-start gap-4 bg-sidebar text-white  w-11/12 mx-auto py-4'>
+          <NavLink
+            style={({ isActive }) => ({
+              color: isActive ? "#fff" : "#fff",
+              borderBottom: isActive && "2px #25C935 solid ",
+            })}
+            to={"createshipment"}
+          >
+            {" "}
+            Create Shipment
+          </NavLink>
+      
+        </nav>
+      </div>
+      <Outlet />
+    </div>
+  );
+}
