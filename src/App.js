@@ -15,7 +15,7 @@ import MBL from "./pages/Shipment/MBL";
 import HBL from "./pages/Shipment/HBL";
 import ShipmentData from "./pages/Shipment/ShipmentData";
 import CreateShipment from "./pages/Shipment/CreateShipment";
-import Test from "./Test";
+import Test from "./test/Test";
 
 function App() {
   const [expand, setExpand]= useState(true)

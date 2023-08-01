@@ -17,9 +17,13 @@ const MBL = ({ props }) => {
     addContainer,
     shipmentData,
     setShipmentData,
-    handleClick
+    search, setSearch,
+    handleClick,
+    searchHandler,
+     result, setResult
   } = props;
 //FOR CONTAINER FORM
+
   const {
     shipmentMedium,
     shipmentType,
@@ -65,41 +69,13 @@ const MBL = ({ props }) => {
 dispatch(createMBL(data))
   };
 
-  const [search, setSearch] = useState("")
-  const [open, setOpen]= useState(false)
 
-  const searchHandler = (e) => {
-    setOpen(true)
-    dispatch(searchCustomer(e.target.value))
-    setSearch(e.target.value)
-  }
-  console.log(shipmentData)
+
+
   return (
     <div>
       <div className='mx-5'>
-        <div className="flex flex-col">
-          <label htmlFor="">Testing feature</label>
-          <textarea name="shipmentMedium" id="" cols="30" rows="10" onChange={(e)=> searchHandler(e)} value={search}></textarea>
 
-          <div>
-            <ul>
-              {
-                customerData.map((item, mainIndex) => {
-                  return item.customerAddress.map((elem, index) => {
-                    return <div onClick={(e) => handleClick(mainIndex, index,  e)}>
-
-                      <li data-id1={`${item._id}`} data-id2={`${elem._id}`} > {`${item.companyName}  - ${elem.city}`}  </li>
-                    </div>
-                  })
-                })
-              }
-            </ul>
-</div>
-
-
-
-
-</div>
 
         <form action=''>
           {/* shipment modes  */}

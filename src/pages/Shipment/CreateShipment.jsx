@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import MBL from "./MBL";
 import HBL from "./HBL";
 import { useDispatch, useSelector } from "react-redux";
-import { getCustomer } from "../../features/customerSlice";
+import { getCustomer, searchCustomer } from "../../features/customerSlice";
 import { getAddress } from "../../features/addressSlice";
 import { getPorts } from "../../features/portSlice";
 
 const CreateShipment = () => {
   const dispatch = useDispatch();
   const [tabs, setTabs] = useState(0);
+
+  const [search, setSearch] = useState("");
+
 
   const customerData = useSelector((state) => state.customer.customerData);
   const addressData = useSelector((state) => state.address.addressData);
@@ -77,14 +80,15 @@ const CreateShipment = () => {
   };
 
   const handleClick = (mainIndex, index, e) => {
-    const { id1 } = e.target.dataset
-    console.log(id1)
+    const { id1, id2 } = e.target.dataset
+    console.log(id1, id2)
 
     let data = [...shipmentData]
-    // data[mainIndex][e.target.name] = e.target.innerText
+    data[mainIndex][id1] = id2
 
 
-    // setShipmentData(data)
+    setShipmentData(data)
+    
         // const data = [...shipmentData];
         // data[0][e.target.name] = e.target.value;
   };
@@ -118,7 +122,10 @@ const CreateShipment = () => {
     setShipmentData(data);
   };
 
+
+
   const props = {
+
     customerData,
     addressData,
     portsData,
@@ -127,8 +134,16 @@ const CreateShipment = () => {
     addContainer,
     shipmentData,
     setShipmentData,
-    handleClick
+    handleClick,
+    search, setSearch,
+
+
   };
+
+const [open, setOpen]= useState(false)
+
+
+
 
   const tabsData = [
     {
