@@ -1,7 +1,65 @@
 import React, { useState } from "react";
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import { createMBL } from "../../features/mblSlice";
 import { getCustomer, searchCustomer } from "../../features/customerSlice";
+
+
+
+
+
+
+
+
+export const Field = ({ props,mainIndex, index, key, val, label }) => {
+  const dispatch = useDispatch()
+   const customerData = useSelector((state) => state.customer.customerData);
+
+const {handleClick }= props
+
+
+  const [result, setResult] = useState("")
+  const [open, setOpen] = useState(false)
+
+
+
+  return (
+    <div>
+      <label> {label} </label>
+      <div>
+
+      <textArea cols='30' rows='5' value={result}
+        onChange={(e) => {
+          dispatch(searchCustomer(e.target.value))
+            setResult(e.target.value);
+            setOpen(true);
+        }}
+      ></textArea>
+      </div>
+      <div>
+        <ul>
+          {
+            open && result && customerData.map((item, i) => {
+              return item.customerAddress.map((elem, index) => {
+                return <li onClick={() => {
+                  setOpen(false)
+                  setResult()
+                  handleClick()
+                }}
+
+                >{item._id} {elem._id}</li>
+             })
+            })
+          }
+        </ul>
+      </div>
+    </div>
+  );
+
+}
+
+
+
+
 
 const MBL = ({ props }) => {
   const dispatch = useDispatch();
@@ -69,7 +127,9 @@ const MBL = ({ props }) => {
 dispatch(createMBL(data))
   };
 
-
+  const fieldProps = {
+handleClick
+}
 
 
   return (
@@ -176,6 +236,9 @@ dispatch(createMBL(data))
             </div>
           </div>
 
+          <div>
+            <Field props={fieldProps} key={""} val={""} label={""} />
+          </div>
           {/* shipper consignee addresses  */}
           <div className='grid grid-cols-4 gap-5 my-6'>
             <div className='flex flex-col'>

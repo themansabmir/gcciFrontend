@@ -22,7 +22,10 @@ const initialState = {
 const mblSlice = createSlice({
     name: "mbl",
     initialState,
-    reducers: {},
+    reducers: {
+        
+
+    },
     extraReducers: (builder) => {
         builder.addCase(createMBL.fulfilled, (state, action) => {
             state.respone = action.payload

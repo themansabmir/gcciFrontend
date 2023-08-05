@@ -9,22 +9,28 @@ const Test = () => {
 
 
   const searchHandler = (e) => {
-    console.log(e)
+
     dispatch(searchCustomer(e))
   }
 
   const [data, setData] = useState([{
-    name: "",
-    age:""
+    shipperName: "",
+    shipperAddress: "e",
+    email:""
   }])
 
   const handleClick = (item,e) => {
-    // console.log(e)
+
     const { name, address } = e.target.dataset
 
-    console.log(name, address)
+
     const arr = [...data]
-    
+
+    arr[0][name] = item._id
+    arr[0][address]= item.customerAddress[0]._id
+    setData(arr)
+
+
 
   }
   const props = {
@@ -37,6 +43,7 @@ const Test = () => {
   return (
     <div>
       <Field props={props} name={"shipperName"} address={"shipperAddress" } />
+      <Field props={props} label="Consignee" name={"email"} address={"shipperAddress" } />
  </div>
   );
 };
