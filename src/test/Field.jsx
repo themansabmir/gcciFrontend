@@ -10,7 +10,7 @@ const Field = ({ props, name , address, label}) => {
 
 
   const filter=[...customerData]
- 
+
   const [result, setResult] = useState()
 const [open, setOpen]= useState(false)
   return (
@@ -22,12 +22,14 @@ const [open, setOpen]= useState(false)
         setOpen(true)
       }}></textarea>
       <div><ul>
-        {open&&result&& filter.map((item, i) => (
-          <li className='hover:bg-gray-200 ' data-name={name} data-address={address} onClick={(e) => {
-            handleClick(item, e)
-            setOpen(false)
-            setResult(`${item.companyName} ${item._id}`)
-          }}> {item.companyName} </li>
+        {open && result && filter.map((item, i) => (
+          item.customerAddress.map((elem, index) => {
+            return <li className='hover:bg-gray-200 ' data-name={name} data-address={address} onClick={(e) => {
+              handleClick(item, e)
+              setOpen(false)
+              setResult(`${item.companyName} ${item._id} ${elem._id}`)
+            }}> {item.companyName} { elem.city} </li>
+          })
       ))}
       </ul></div>
    </div>

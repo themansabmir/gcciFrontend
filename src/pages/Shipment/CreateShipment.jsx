@@ -79,16 +79,23 @@ const CreateShipment = () => {
     setShipmentData(data);
   };
 
-  const handleClick = (mainIndex, index, e) => {
-    const { id1, id2 } = e.target.dataset
-    console.log(id1, id2)
+  const handleClick = (mainIndex, index, e, item, elem) => {
+
+    const { key, val } = e.target.dataset
+
 
     let data = [...shipmentData]
-    data[mainIndex][id1] = id2
+    console.log(data)
+    console.log(mainIndex)
+    data[mainIndex][key] = item
+    data[mainIndex][val]= elem
 
 
     setShipmentData(data)
-    
+
+    console.log(data)
+
+
         // const data = [...shipmentData];
         // data[0][e.target.name] = e.target.value;
   };
@@ -163,9 +170,15 @@ const [open, setOpen]= useState(false)
   }, [dispatch]);
   return (
     <div className='flex flex-col'>
-      <div className='flex justify-around bg-blue-100'>
+      <div className='flex gap-8 '>
         {tabsData.map((item, index) => (
-          <li key={index} onClick={() => setTabs(index)}>
+          <li
+            className={`cursor-pointer list-none my-5 px-8 py-2 text-xl ml-5  ${
+              tabs === index ? `bg-primary  text-white  shadow-md shadow-gray-600 rounded` : ""
+            } `}
+            key={index}
+            onClick={() => setTabs(index)}
+          >
             {item.label}
           </li>
         ))}

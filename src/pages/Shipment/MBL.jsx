@@ -10,46 +10,59 @@ import { getCustomer, searchCustomer } from "../../features/customerSlice";
 
 
 
-export const Field = ({ props,mainIndex, index, key, val, label }) => {
+
+export const Field = ({ props,  name, val, label }) => {
+
   const dispatch = useDispatch()
    const customerData = useSelector((state) => state.customer.customerData);
 
 const {handleClick }= props
 
 
-  const [result, setResult] = useState("")
+  const [result, setResult] = useState()
   const [open, setOpen] = useState(false)
 
-
+     console.log(result);
 
   return (
-    <div>
+    <div className='w-full'>
       <label> {label} </label>
       <div>
-
-      <textArea cols='30' rows='5' value={result}
-        onChange={(e) => {
-          dispatch(searchCustomer(e.target.value))
+        <textarea
+          cols={"60"}
+          rows='5'
+          value={result}
+          onChange={(e) => {
+            dispatch(searchCustomer(e.target.value));
             setResult(e.target.value);
             setOpen(true);
-        }}
-      ></textArea>
+          }}
+        ></textarea>
       </div>
       <div>
-        <ul>
-          {
-            open && result && customerData.map((item, i) => {
-              return item.customerAddress.map((elem, index) => {
-                return <li onClick={() => {
-                  setOpen(false)
-                  setResult()
-                  handleClick()
-                }}
-
-                >{item._id} {elem._id}</li>
-             })
-            })
-          }
+        <ul className='relative top-0'>
+          <div className='absolute  bg-gray-200 w-full rounded  mt-1'>
+            {open &&
+              result &&
+              customerData.map((item, mainIndex) => {
+                return item.customerAddress.map((elem, index) => {
+                  return (
+                    <li
+                      data-key={name}
+                      data-val={val}
+                      className='hover:bg-slate-300 w-full px-5 py-2  cursor-pointer'
+                      onClick={(e) => {
+                        console.log(item);
+                        handleClick(mainIndex, index, e, item._id, elem._id);
+                        setResult(`${item.companyName}
+${elem.address}${elem.city}${elem.country}${elem.gstNumber}${item.email}${item.mobile}${item.fax}`);
+                        setOpen(false);
+                      }}
+                    >{`${item.companyName} - ${elem.city} ${elem.country}`}</li>
+                  );
+                });
+              })}
+          </div>
         </ul>
       </div>
     </div>
@@ -74,11 +87,10 @@ const MBL = ({ props }) => {
     handleContainerChange,
     addContainer,
     shipmentData,
-    setShipmentData,
-    search, setSearch,
+
     handleClick,
-    searchHandler,
-     result, setResult
+
+
   } = props;
 //FOR CONTAINER FORM
 
@@ -122,7 +134,7 @@ const MBL = ({ props }) => {
   const submit = () => {
     const data = {
       ...shipmentData[0],
-      hblList: ["64becb0dacd4a06fb4927b9f"],
+
     };
 dispatch(createMBL(data))
   };
@@ -135,8 +147,6 @@ handleClick
   return (
     <div>
       <div className='mx-5'>
-
-
         <form action=''>
           {/* shipment modes  */}
           <div className='grid grid-cols-5 gap-12 '>
@@ -236,11 +246,145 @@ handleClick
             </div>
           </div>
 
-          <div>
-            <Field props={fieldProps} key={""} val={""} label={""} />
+          {/* MBL number date  */}
+          <div className='grid grid-cols-3 gap-12 my-6'>
+            <div className='flex flex-col'>
+              <label
+                htmlFor=''
+                className='text-sm font-medium leading-6 text-gray-900'
+              >
+                Shipping Line Name
+              </label>
+              <input
+                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                onChange={(e) => handleShipmentChange(0, e)}
+                type='text'
+                value={shiplineName}
+                placeholder='shipping line name'
+                name='shiplineName'
+              />
+            </div>
+            <div className='flex flex-col'>
+              <label
+                className='text-sm font-medium leading-6 text-gray-900'
+                htmlFor=''
+              >
+                MBL Number
+              </label>
+              <input
+                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                onChange={(e) => handleShipmentChange(0, e)}
+                type='text'
+                value={mblNumber}
+                placeholder='MBL Number'
+                name='mblNumber'
+              />
+            </div>
+            <div className='flex flex-col'>
+              <label
+                className='text-sm font-medium leading-6 text-gray-900'
+                htmlFor=''
+              >
+                MBL Date
+              </label>
+              <input
+                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                value={mblDate}
+                onChange={(e) => handleShipmentChange(0, e)}
+                type='text'
+                placeholder='MBL Date'
+                name='mblDate'
+              />
+            </div>
+          </div>
+
+          <div className='flex justify-between '>
+            <div className=''>
+              <Field
+                props={fieldProps}
+                name={"shipperName"}
+                val={"shipperAddress"}
+                label={"Shipper"}
+              />
+              <Field
+                props={fieldProps}
+                name={"consigneeName"}
+                val={"consigneeAddress"}
+                label={"Consignee"}
+              />
+              <Field
+                props={fieldProps}
+                name={"notifyName"}
+                val={"notifyAddress"}
+                label={"Notify"}
+              />
+            </div>
+            <div>
+              <Field
+                props={fieldProps}
+                name={"agentName"}
+                val={"agentAddress"}
+                label={"Forwarding Agent"}
+              />
+              <div className='flex flex-col'>
+                <label
+                  className='text-sm font-medium leading-6 text-gray-900'
+                  htmlFor=''
+                >
+                  place of receipt
+                </label>
+                <textarea
+                  cols={60}
+                  rows={2}
+                  className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                  value={receiptPlace}
+                  onChange={(e) => handleShipmentChange(0, e)}
+                  type='text'
+                  placeholder='Place of receipt'
+                  name='receiptPlace'
+                />
+              </div>
+              <div className='flex flex-col'>
+                <label
+                  className='text-sm font-medium leading-6 text-gray-900'
+                  htmlFor=''
+                >
+                  Place of Delivery
+                </label>
+                <textarea
+                  cols={60}
+                  rows={2}
+                  className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                  value={deliveryPlace}
+                  onChange={(e) => handleShipmentChange(0, e)}
+                  type='text'
+                  placeholder='Place of receipt'
+                  name='deliveryPlace'
+                />
+              </div>
+              <div className='flex flex-col'>
+                <label
+                  className='text-sm font-medium leading-6 text-gray-900'
+                  htmlFor=''
+                >
+                  Transhipment Port
+                </label>
+                <textarea
+                  cols={60}
+                  rows={2}
+                  className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                  onChange={(e) => handleShipmentChange(0, e)}
+                  type='text'
+                  value={transhipmentPort}
+                  name='transhipmentPort'
+                  placeholder='Transhipment Port'
+                  id=''
+                />
+              </div>
+            </div>
           </div>
           {/* shipper consignee addresses  */}
-          <div className='grid grid-cols-4 gap-5 my-6'>
+          {/* <div className='grid grid-cols-4 gap-5 my-6'>
             <div className='flex flex-col'>
               <label
                 htmlFor=''
@@ -409,180 +553,89 @@ handleClick
                 })}
               </select>
             </div>
-          </div>
-
-          {/* MBL number date  */}
-          <div className='grid grid-cols-3 gap-12 my-6'>
-            <div className='flex flex-col'>
-              <label
-                htmlFor=''
-                className='text-sm font-medium leading-6 text-gray-900'
-              >
-                Shipping Line Name
-              </label>
-              <input
-                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-                onChange={(e) => handleShipmentChange(0, e)}
-                type='text'
-                value={shiplineName}
-                placeholder='shipping line name'
-                name='shiplineName'
-              />
-            </div>
-            <div className='flex flex-col'>
-              <label
-                className='text-sm font-medium leading-6 text-gray-900'
-                htmlFor=''
-              >
-                MBL Number
-              </label>
-              <input
-                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-                onChange={(e) => handleShipmentChange(0, e)}
-                type='text'
-                value={mblNumber}
-                placeholder='MBL Number'
-                name='mblNumber'
-              />
-            </div>
-            <div className='flex flex-col'>
-              <label
-                className='text-sm font-medium leading-6 text-gray-900'
-                htmlFor=''
-              >
-                MBL Date
-              </label>
-              <input
-                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-                value={mblDate}
-                onChange={(e) => handleShipmentChange(0, e)}
-                type='text'
-                placeholder='MBL Date'
-                name='mblDate'
-              />
-            </div>
-          </div>
+          </div> */}
 
           {/* Port load discharge etc */}
-          <div className='grid grid-cols-5 gap-4 my-6'>
-            <div className='flex flex-col'>
-              <label
-                className='text-sm font-medium leading-6 text-gray-900'
-                htmlFor=''
-              >
-                place of receipt
-              </label>
-              <input
-                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-                value={receiptPlace}
-                onChange={(e) => handleShipmentChange(0, e)}
-                type='text'
-                placeholder='Place of receipt'
-                name='receiptPlace'
-              />
+          <div className='grid grid-cols-3 gap-5 my-6'>
+            <div>
+              <div className='flex flex-col'>
+                <label
+                  className='text-sm font-medium leading-6 text-gray-900'
+                  htmlFor=''
+                >
+                  Port of loading
+                </label>
+                <select
+                  className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
+                  value={loadingPort}
+                  onChange={(e) => handleShipmentChange(0, e)}
+                  name='loadingPort'
+                  id=''
+                >
+                  <option value=''>Select Port</option>
+                  {portsData.map((item, index) => {
+                    return (
+                      <option value={item._id}>
+                        {item.portName + " " + item.portCode}{" "}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              <div className='flex flex-col'>
+                <label
+                  className='text-sm font-medium leading-6 text-gray-900'
+                  htmlFor=''
+                >
+                  Port of Discharge
+                </label>
+                <select
+                  className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
+                  onChange={(e) => handleShipmentChange(0, e)}
+                  name='dischargePort'
+                  value={dischargePort}
+                  id=''
+                >
+                  <option value=''>Select Port</option>
+                  {portsData.map((item, index) => {
+                    return (
+                      <option value={item._id}>
+                        {item.portName + " " + item.portCode}{" "}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
             </div>
-            <div className='flex flex-col'>
-              <label
-                className='text-sm font-medium leading-6 text-gray-900'
-                htmlFor=''
-              >
-                Place of Delivery
-              </label>
-              <input
-                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-                value={deliveryPlace}
-                onChange={(e) => handleShipmentChange(0, e)}
-                type='text'
-                placeholder='Place of receipt'
-                name='deliveryPlace'
-              />
-            </div>
-            <div className='flex flex-col'>
-              <label
-                className='text-sm font-medium leading-6 text-gray-900'
-                htmlFor=''
-              >
-                Port of loading
-              </label>
-              <select
-                className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
-                value={loadingPort}
-                onChange={(e) => handleShipmentChange(0, e)}
-                name='loadingPort'
-                id=''
-              >
-                <option value=''>Select Port</option>
-                {portsData.map((item, index) => {
-                  return (
-                    <option value={item._id}>
-                      {item.portName + " " + item.portCode}{" "}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-            <div className='flex flex-col'>
-              <label
-                className='text-sm font-medium leading-6 text-gray-900'
-                htmlFor=''
-              >
-                Port of Discharge
-              </label>
-              <select
-                className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
-                onChange={(e) => handleShipmentChange(0, e)}
-                name='dischargePort'
-                value={dischargePort}
-                id=''
-              >
-                <option value=''>Select Port</option>
-                {portsData.map((item, index) => {
-                  return (
-                    <option value={item._id}>
-                      {item.portName + " " + item.portCode}{" "}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-            <div className='flex flex-col'>
-              <label
-                className='text-sm font-medium leading-6 text-gray-900'
-                htmlFor=''
-              >
-                Transhipment Port
-              </label>
-              <input
-                className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-                onChange={(e) => handleShipmentChange(0, e)}
-                type='text'
-                value={transhipmentPort}
-                name='transhipmentPort'
-                placeholder='Transhipment Port'
-                id=''
-              />
-            </div>
-          </div>
-          {/* vessel type  */}
-          <div className='grid grid-cols-3 gap-8 my-6'>
-            <div className='flex flex-col'>
-              <label
-                className='text-sm font-medium leading-6 text-gray-900'
-                htmlFor=''
-              >
-                Vessel Type
-              </label>
-              <select
-                className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
-                onChange={(e) => handleShipmentChange(0, e)}
-                name='vessel'
-                value={vessel}
-                id=''
-              >
-                <option value=''>Select Vessel Type</option>
-                <option value='vessel'>Vessel</option>
-                <option value='voyage'>Voyage</option>
-              </select>
+            <div>
+              <div className='flex flex-col'>
+                <label
+                  className='text-sm font-medium leading-6 text-gray-900'
+                  htmlFor=''
+                >
+                  Vessel
+                </label>
+                <input
+                  type='text'
+                  onChange={(e) => handleShipmentChange(0, e)}
+                  name='vessel'
+                  placeholder='Vessel'
+                  className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                />
+                <label
+                  className='text-sm font-medium leading-6 text-gray-900'
+                  htmlFor=''
+                >
+                  Voyage Number
+                </label>
+                <input
+                  type='text'
+                  onChange={(e) => handleShipmentChange(0, e)}
+                  name='voyage'
+                  placeholder='Voyage Number'
+                  className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                />
+              </div>
             </div>
             <div className='flex flex-col'>
               <label
@@ -605,8 +658,7 @@ handleClick
                 <option value='CIF'>CIF</option>
                 <option value='FCA'>FCA</option>
               </select>
-            </div>
-            <div className='flex flex-col'>
+
               <label
                 className='text-sm font-medium leading-6 text-gray-900'
                 htmlFor=''
@@ -627,6 +679,30 @@ handleClick
               </select>
             </div>
           </div>
+          {/* vessel type  */}
+
+          {/* <div className='grid grid-cols-3 gap-8 my-6'>
+            <div className='flex flex-col'>
+              <label
+                className='text-sm font-medium leading-6 text-gray-900'
+                htmlFor=''
+              >
+                {" "}
+                Freight Type
+              </label>
+              <select
+                className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
+                value={freightType}
+                onChange={(e) => handleShipmentChange(0, e)}
+                name='freightType'
+                id=''
+              >
+                <option value=''>Select an option</option>
+                <option value='prepaid'>Prepaid</option>
+                <option value='collect'>Collect</option>
+              </select>
+            </div>
+          </div> */}
           {/* shiping bill number & dates  */}
           <div className='grid grid-cols-3 gap-6 my-6'>
             <div className='flex flex-col'>
@@ -777,8 +853,6 @@ handleClick
             </div>
           </div>
 
-
-
           <div className='my-12 flex flex-col gap-10'>
             <h1 className='text-4xl'>Container Details:</h1>
             {shipmentData[0].containerDetails.map((item, index) => {
@@ -814,7 +888,7 @@ handleClick
                         name='containerNumber'
                       />
                     </div>
-                    <div className="flex flex-col">
+                    <div className='flex flex-col'>
                       <label
                         className='text-sm font-medium leading-6 text-gray-900'
                         htmlFor=''
@@ -978,12 +1052,12 @@ handleClick
               );
             })}
           </div>
-          <button type='button' onClick={(e) => addContainer(0, e)}>
-            Add New
+          <button type='button' className="float-right bg-red-600 text-white font-semibold px-4 mb-5 relative bottom-7 py-2 my-5 text-4xl rounded-full "  onClick={(e) => addContainer(0, e)}>
+            +
           </button>
         </form>
 
-        <button onClick={submit}>Submit Form</button>
+        <button className="bg-primary text-white font-semibold px-2 py-2 rounded-md " onClick={submit}>Submit </button>
       </div>
     </div>
   );

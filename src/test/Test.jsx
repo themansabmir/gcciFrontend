@@ -16,7 +16,7 @@ const Test = () => {
   const [data, setData] = useState([{
     shipperName: "",
     shipperAddress: "e",
-    email:""
+    email:""  
   }])
 
   const handleClick = (item,e) => {
