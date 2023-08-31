@@ -1,28 +1,17 @@
 import React, { useState } from "react";
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from "react-redux";
 import { createMBL } from "../../features/mblSlice";
-import { getCustomer, searchCustomer } from "../../features/customerSlice";
+import { searchCustomer } from "../../features/customerSlice";
+import { AiFillPlusCircle } from "react-icons/ai";
 
+export const Field = ({ props, name, val, label }) => {
+  const dispatch = useDispatch();
+  const customerData = useSelector((state) => state.customer.customerData);
 
+  const { handleClick } = props;
 
-
-
-
-
-
-
-export const Field = ({ props,  name, val, label }) => {
-
-  const dispatch = useDispatch()
-   const customerData = useSelector((state) => state.customer.customerData);
-
-const {handleClick }= props
-
-
-  const [result, setResult] = useState()
-  const [open, setOpen] = useState(false)
-
-     console.log(result);
+  const [result, setResult] = useState();
+  const [open, setOpen] = useState(false);
 
   return (
     <div className='w-full'>
@@ -67,12 +56,7 @@ ${elem.address}${elem.city}${elem.country}${elem.gstNumber}${item.email}${item.m
       </div>
     </div>
   );
-
-}
-
-
-
-
+};
 
 const MBL = ({ props }) => {
   const dispatch = useDispatch();
@@ -81,18 +65,15 @@ const MBL = ({ props }) => {
 
   const {
     portsData,
-    addressData,
-    customerData,
+
     handleShipmentChange,
     handleContainerChange,
     addContainer,
     shipmentData,
 
     handleClick,
-
-
   } = props;
-//FOR CONTAINER FORM
+  //FOR CONTAINER FORM
 
   const {
     shipmentMedium,
@@ -106,7 +87,9 @@ const MBL = ({ props }) => {
     receiptPlace,
     deliveryPlace,
     vessel,
+    voyage,
     tradeType,
+    remarks,
     freightType,
     exchangeRate,
     SOBdate,
@@ -118,35 +101,24 @@ const MBL = ({ props }) => {
     billEntryDate,
     freePOL,
     freePOD,
-    shipperName,
-    shipperAddress,
-    consigneeName,
-    consigneeAddress,
-    notifyName,
-    notifyAddress,
-    agentName,
-    agentAddress,
     loadingPort,
     dischargePort,
   } = shipmentData[0];
 
-
   const submit = () => {
     const data = {
       ...shipmentData[0],
-
     };
-dispatch(createMBL(data))
+    dispatch(createMBL(data));
   };
 
   const fieldProps = {
-handleClick
-}
-
+    handleClick,
+  };
 
   return (
     <div>
-      <div className='mx-5'>
+      <div className='mx-5 mb-4'>
         <form action=''>
           {/* shipment modes  */}
           <div className='grid grid-cols-5 gap-12 '>
@@ -620,6 +592,7 @@ handleClick
                   onChange={(e) => handleShipmentChange(0, e)}
                   name='vessel'
                   placeholder='Vessel'
+                  value={vessel}
                   className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 />
                 <label
@@ -632,6 +605,7 @@ handleClick
                   type='text'
                   onChange={(e) => handleShipmentChange(0, e)}
                   name='voyage'
+                  value={voyage}
                   placeholder='Voyage Number'
                   className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 />
@@ -868,11 +842,13 @@ handleClick
                 netWeight,
                 volume,
                 description,
+                hsCode,
+                marksNumbers,
               } = item;
 
               return (
-                <div className='flex flex-col'>
-                  <div className='grid grid-cols-5 gap-5'>
+                <div className='grid grid-cols-3 gap-5'>
+                  <div className=''>
                     <div className='flex flex-col'>
                       <label
                         className='text-sm font-medium leading-6 text-gray-900'
@@ -888,7 +864,7 @@ handleClick
                         name='containerNumber'
                       />
                     </div>
-                    <div className='flex flex-col'>
+                    <div className='flex flex-col w-full'>
                       <label
                         className='text-sm font-medium leading-6 text-gray-900'
                         htmlFor=''
@@ -906,6 +882,21 @@ handleClick
                         <option value='20GP'>20GP</option>
                         <option value='40HQ'>40HQ</option>
                       </select>
+                    </div>
+                    <div className='flex flex-col'>
+                      <label
+                        className='text-sm font-medium leading-6 text-gray-900'
+                        htmlFor=''
+                      >
+                        Marks and No.s
+                      </label>
+                      <input
+                        className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                        value={marksNumbers}
+                        type='text'
+                        name='marksNumbers'
+                        onChange={(e) => handleContainerChange(0, index, e)}
+                      />
                     </div>
                     <div className='flex flex-col'>
                       <label
@@ -952,8 +943,24 @@ handleClick
                         name='customsSeal'
                       />
                     </div>
+                    <div className='flex flex-col'>
+                      <label
+                        className='text-sm font-medium leading-6 text-gray-900'
+                        htmlFor=''
+                      >
+                        HS Code
+                      </label>
+                      <input
+                        className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                        value={hsCode}
+                        onChange={(e) => handleContainerChange(0, index, e)}
+                        type='text'
+                        name='hsCode'
+                      />
+                    </div>
                   </div>
-                  <div className='grid grid-cols-3 gap-5'>
+
+                  <div className=''>
                     <div className='flex flex-col'>
                       <label
                         className='text-sm font-medium leading-6 text-gray-900'
@@ -992,7 +999,8 @@ handleClick
                       >
                         Description
                       </label>
-                      <input
+                      <textarea
+                        rows={10}
                         className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                         value={description}
                         onChange={(e) => handleContainerChange(0, index, e)}
@@ -1001,7 +1009,7 @@ handleClick
                       />
                     </div>
                   </div>
-                  <div className='grid grid-cols-3 gap-5'>
+                  <div className=''>
                     <div className='flex flex-col'>
                       <label
                         className='text-sm font-medium leading-6 text-gray-900'
@@ -1052,12 +1060,32 @@ handleClick
               );
             })}
           </div>
-          <button type='button' className="float-right bg-red-600 text-white font-semibold px-4 mb-5 relative bottom-7 py-2 my-5 text-4xl rounded-full "  onClick={(e) => addContainer(0, e)}>
-            +
+          <button
+            type='button'
+            className='float-right text-4xl text-red-600 font-semibold  mb-5 relative bottom-7    '
+            onClick={(e) => addContainer(0, e)}
+          >
+            <AiFillPlusCircle />
           </button>
+          <div className='flex flex-col mb-2'>
+            <label htmlFor=''>Remarks:</label>
+            <textarea
+              id=''
+              cols='30'
+              rows='4'
+              value={remarks}
+              onChange={(e) => handleShipmentChange(0, e)}
+              name='remarks'
+            ></textarea>
+          </div>
         </form>
 
-        <button className="bg-primary text-white font-semibold px-2 py-2 rounded-md " onClick={submit}>Submit </button>
+        <button
+          className='bg-primary text-white font-semibold px-4 py-2 rounded-md '
+          onClick={submit}
+        >
+          Submit{" "}
+        </button>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import MBL from "./MBL";
 import HBL from "./HBL";
 import { useDispatch, useSelector } from "react-redux";
-import { getCustomer, searchCustomer } from "../../features/customerSlice";
+import { getCustomer } from "../../features/customerSlice";
 import { getAddress } from "../../features/addressSlice";
 import { getPorts } from "../../features/portSlice";
 
@@ -11,7 +11,6 @@ const CreateShipment = () => {
   const [tabs, setTabs] = useState(0);
 
   const [search, setSearch] = useState("");
-
 
   const customerData = useSelector((state) => state.customer.customerData);
   const addressData = useSelector((state) => state.address.addressData);
@@ -65,6 +64,7 @@ const CreateShipment = () => {
           netWeight: "",
           volume: "",
           description: "",
+          hsCode: "",
         },
       ],
     },
@@ -80,24 +80,20 @@ const CreateShipment = () => {
   };
 
   const handleClick = (mainIndex, index, e, item, elem) => {
+    const { key, val } = e.target.dataset;
 
-    const { key, val } = e.target.dataset
+    let data = [...shipmentData];
+    console.log(data);
+    console.log(mainIndex);
+    data[mainIndex][key] = item;
+    data[mainIndex][val] = elem;
 
+    setShipmentData(data);
 
-    let data = [...shipmentData]
-    console.log(data)
-    console.log(mainIndex)
-    data[mainIndex][key] = item
-    data[mainIndex][val]= elem
+    console.log(data);
 
-
-    setShipmentData(data)
-
-    console.log(data)
-
-
-        // const data = [...shipmentData];
-        // data[0][e.target.name] = e.target.value;
+    // const data = [...shipmentData];
+    // data[0][e.target.name] = e.target.value;
   };
   // container input  handler
   const handleContainerChange = (mainIndex, index, e) => {
@@ -129,10 +125,7 @@ const CreateShipment = () => {
     setShipmentData(data);
   };
 
-
-
   const props = {
-
     customerData,
     addressData,
     portsData,
@@ -142,15 +135,9 @@ const CreateShipment = () => {
     shipmentData,
     setShipmentData,
     handleClick,
-    search, setSearch,
-
-
+    search,
+    setSearch,
   };
-
-const [open, setOpen]= useState(false)
-
-
-
 
   const tabsData = [
     {
@@ -170,11 +157,13 @@ const [open, setOpen]= useState(false)
   }, [dispatch]);
   return (
     <div className='flex flex-col'>
-      <div className='flex gap-8 '>
+      <div className='flex  sticky top-0 border-b-2 border-b-black  mb-3 bg-white  '>
         {tabsData.map((item, index) => (
           <li
-            className={`cursor-pointer list-none my-5 px-8 py-2 text-xl ml-5  ${
-              tabs === index ? `bg-primary  text-white  shadow-md shadow-gray-600 rounded` : ""
+            className={`cursor-pointer list-none my-2 px-8 py-2 text-xl ml-5  ${
+              tabs === index
+                ? `bg-primary  text-white  shadow-md shadow-gray-600 rounded`
+                : ""
             } `}
             key={index}
             onClick={() => setTabs(index)}
