@@ -8,6 +8,7 @@ export const Field = ({ props, name, val, label }) => {
   const dispatch = useDispatch();
   const customerData = useSelector((state) => state.customer.customerData);
 
+
   const { handleClick } = props;
 
   const [result, setResult] = useState();
@@ -34,6 +35,7 @@ export const Field = ({ props, name, val, label }) => {
             {open &&
               result &&
               customerData.map((item, mainIndex) => {
+                console.log(item, mainIndex)
                 return item.customerAddress.map((elem, index) => {
                   return (
                     <li
@@ -41,8 +43,8 @@ export const Field = ({ props, name, val, label }) => {
                       data-val={val}
                       className='hover:bg-slate-300 w-full px-5 py-2  cursor-pointer'
                       onClick={(e) => {
-                        console.log(item);
-                        handleClick(mainIndex, index, e, item._id, elem._id);
+
+                        handleClick(0, index, e, item._id, elem._id);
                         setResult(`${item.companyName}
 ${elem.address}${elem.city}${elem.country}${elem.gstNumber}${item.email}${item.mobile}${item.fax}`);
                         setOpen(false);
@@ -1087,6 +1089,8 @@ const MBL = ({ props }) => {
           Submit{" "}
         </button>
       </div>
+
+      <div></div>
     </div>
   );
 };

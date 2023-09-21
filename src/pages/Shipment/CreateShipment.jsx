@@ -83,14 +83,12 @@ const CreateShipment = () => {
     const { key, val } = e.target.dataset;
 
     let data = [...shipmentData];
-    console.log(data);
-    console.log(mainIndex);
+
+
     data[mainIndex][key] = item;
     data[mainIndex][val] = elem;
 
     setShipmentData(data);
-
-    console.log(data);
 
     // const data = [...shipmentData];
     // data[0][e.target.name] = e.target.value;
@@ -146,7 +144,7 @@ const CreateShipment = () => {
     },
     {
       label: "HBL",
-      content: <HBL />,
+      content: <HBL props={props} />,
     },
   ];
 
