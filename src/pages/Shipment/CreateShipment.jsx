@@ -51,6 +51,7 @@ const CreateShipment = () => {
       agentAddress: "",
       loadingPort: "",
       dischargePort: "",
+      remarks:"",
       containerDetails: [
         {
           containerNumber: "",
@@ -160,7 +161,7 @@ const CreateShipment = () => {
           <li
             className={`cursor-pointer list-none my-2 px-8 py-2 text-xl ml-5  ${
               tabs === index
-                ? `bg-primary  text-white  shadow-md shadow-gray-600 rounded`
+                ? `bg-primary  text-white  shadow-md `
                 : ""
             } `}
             key={index}

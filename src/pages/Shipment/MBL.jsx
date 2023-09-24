@@ -8,7 +8,6 @@ export const Field = ({ props, name, val, label }) => {
   const dispatch = useDispatch();
   const customerData = useSelector((state) => state.customer.customerData);
 
-
   const { handleClick } = props;
 
   const [result, setResult] = useState();
@@ -35,15 +34,14 @@ export const Field = ({ props, name, val, label }) => {
             {open &&
               result &&
               customerData.map((item, mainIndex) => {
-                console.log(item, mainIndex)
                 return item.customerAddress.map((elem, index) => {
                   return (
                     <li
+                      key={index}
                       data-key={name}
                       data-val={val}
                       className='hover:bg-slate-300 w-full px-5 py-2  cursor-pointer'
                       onClick={(e) => {
-
                         handleClick(0, index, e, item._id, elem._id);
                         setResult(`${item.companyName}
 ${elem.address}${elem.city}${elem.country}${elem.gstNumber}${item.email}${item.mobile}${item.fax}`);
@@ -62,6 +60,8 @@ ${elem.address}${elem.city}${elem.country}${elem.gstNumber}${item.email}${item.m
 
 const MBL = ({ props }) => {
   const dispatch = useDispatch();
+
+  const [disableEdit, setDisableEdit] = useState(false);
 
   // FOR MAIN FORM
 
@@ -114,13 +114,22 @@ const MBL = ({ props }) => {
     dispatch(createMBL(data));
   };
 
+  const saveMBLData = () => {
+    const data = {
+      ...shipmentData[0],
+    };
+
+    localStorage.setItem("mblData", JSON.stringify(data));
+    setDisableEdit(true);
+  };
+
   const fieldProps = {
     handleClick,
   };
 
   return (
-    <div>
-      <div className='mx-5 mb-4'>
+    <div className='bg-gray-300 py-4'>
+      <div className='mx-5 mb-4 '>
         <form action=''>
           {/* shipment modes  */}
           <div className='grid grid-cols-5 gap-12 '>
@@ -134,6 +143,7 @@ const MBL = ({ props }) => {
               <select
                 name='shipmentMedium'
                 value={shipmentMedium}
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 id=''
                 className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
@@ -154,6 +164,7 @@ const MBL = ({ props }) => {
                 onChange={(e) => handleShipmentChange(0, e)}
                 name='shipmentType'
                 id=''
+                disabled={disableEdit}
                 value={shipmentType}
                 className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
               >
@@ -173,6 +184,7 @@ const MBL = ({ props }) => {
                 onChange={(e) => handleShipmentChange(0, e)}
                 name='shipmentMode'
                 value={shipmentMode}
+                disabled={disableEdit}
                 id=''
                 className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
               >
@@ -189,6 +201,7 @@ const MBL = ({ props }) => {
                 Booking Number{" "}
               </label>
               <input
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 type='text'
                 name='bookingNumber'
@@ -205,6 +218,7 @@ const MBL = ({ props }) => {
                 MBL Type
               </label>
               <select
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 name='MBLtype'
                 value={MBLtype}
@@ -231,6 +245,7 @@ const MBL = ({ props }) => {
               </label>
               <input
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 type='text'
                 value={shiplineName}
@@ -247,6 +262,7 @@ const MBL = ({ props }) => {
               </label>
               <input
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 type='text'
                 value={mblNumber}
@@ -264,6 +280,7 @@ const MBL = ({ props }) => {
               <input
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 value={mblDate}
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 type='text'
                 placeholder='MBL Date'
@@ -312,6 +329,7 @@ const MBL = ({ props }) => {
                   rows={2}
                   className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                   value={receiptPlace}
+                  disabled={disableEdit}
                   onChange={(e) => handleShipmentChange(0, e)}
                   type='text'
                   placeholder='Place of receipt'
@@ -330,6 +348,7 @@ const MBL = ({ props }) => {
                   rows={2}
                   className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                   value={deliveryPlace}
+                  disabled={disableEdit}
                   onChange={(e) => handleShipmentChange(0, e)}
                   type='text'
                   placeholder='Place of receipt'
@@ -347,6 +366,7 @@ const MBL = ({ props }) => {
                   cols={60}
                   rows={2}
                   className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                  disabled={disableEdit}
                   onChange={(e) => handleShipmentChange(0, e)}
                   type='text'
                   value={transhipmentPort}
@@ -358,176 +378,6 @@ const MBL = ({ props }) => {
             </div>
           </div>
           {/* shipper consignee addresses  */}
-          {/* <div className='grid grid-cols-4 gap-5 my-6'>
-            <div className='flex flex-col'>
-              <label
-                htmlFor=''
-                className='text-sm font-medium leading-6 text-gray-900'
-              >
-                MBL Shipper Name
-              </label>
-              <select
-                className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
-                name='shipperName'
-                value={shipperName}
-                id=''
-                onChange={(e) => handleShipmentChange(0, e)}
-              >
-                <option value=''> MBL Shipper Name</option>
-                {customerData.map((item) => {
-                  return <option value={item._id}>{item.companyName}</option>;
-                })}
-              </select>
-              <label
-                htmlFor=''
-                className='text-sm font-medium leading-6 text-gray-900'
-              >
-                MBL Shipper Address
-              </label>
-              <select
-                className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
-                onChange={(e) => handleShipmentChange(0, e)}
-                name='shipperAddress'
-                value={shipperAddress}
-                id=''
-              >
-                <option value=''> MBL Shipper address </option>
-                {addressData.map((item) => {
-                  return (
-                    <option
-                      value={item._id}
-                    >{`${item.city} ${item.country}`}</option>
-                  );
-                })}
-              </select>
-            </div>
-            <div className='flex flex-col'>
-              <label
-                htmlFor=''
-                className='text-sm font-medium leading-6 text-gray-900'
-              >
-                MBL Consignee Name
-              </label>
-              <select
-                className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
-                onChange={(e) => handleShipmentChange(0, e)}
-                name='consigneeName'
-                value={consigneeName}
-                id=''
-              >
-                <option value=''> MBL Consignee Name</option>
-                {customerData.map((item) => {
-                  return <option value={item._id}>{item.companyName}</option>;
-                })}
-              </select>
-              <label
-                htmlFor=''
-                className='text-sm font-medium leading-6 text-gray-900'
-              >
-                MBL Consignee Address
-              </label>
-              <select
-                className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
-                onChange={(e) => handleShipmentChange(0, e)}
-                name='consigneeAddress'
-                value={consigneeAddress}
-                id=''
-              >
-                <option value=''> MBL Consignee address </option>
-                {addressData.map((item) => {
-                  return (
-                    <option
-                      value={item._id}
-                    >{`${item.city} ${item.country}`}</option>
-                  );
-                })}
-              </select>
-            </div>
-            <div className='flex flex-col'>
-              <label
-                htmlFor=''
-                className='text-sm font-medium leading-6 text-gray-900'
-              >
-                MBL Notify Party Name
-              </label>
-              <select
-                className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
-                onChange={(e) => handleShipmentChange(0, e)}
-                name='notifyName'
-                value={notifyName}
-                id=''
-              >
-                <option value=''> MBL Notify party Name</option>
-                {customerData.map((item) => {
-                  return <option value={item._id}>{item.companyName}</option>;
-                })}
-              </select>
-              <label
-                htmlFor=''
-                className='text-sm font-medium leading-6 text-gray-900'
-              >
-                MBL Notify Party Address
-              </label>
-              <select
-                className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
-                onChange={(e) => handleShipmentChange(0, e)}
-                name='notifyAddress'
-                value={notifyAddress}
-                id=''
-              >
-                <option value=''> MBL Notify Party Address </option>
-                {addressData.map((item) => {
-                  return (
-                    <option
-                      value={item._id}
-                    >{`${item.city} ${item.country}`}</option>
-                  );
-                })}
-              </select>
-            </div>
-            <div className='flex flex-col'>
-              <label
-                htmlFor=''
-                className='text-sm font-medium leading-6 text-gray-900'
-              >
-                MBL Agent Name
-              </label>
-              <select
-                className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
-                name='agentName'
-                onChange={(e) => handleShipmentChange(0, e)}
-                value={agentName}
-                id=''
-              >
-                <option value=''> MBL Agent Name</option>
-                {customerData.map((item) => {
-                  return <option value={item._id}>{item.companyName}</option>;
-                })}
-              </select>
-              <label
-                htmlFor=''
-                className='text-sm font-medium leading-6 text-gray-900'
-              >
-                MBL Agent Address
-              </label>
-              <select
-                className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
-                onChange={(e) => handleShipmentChange(0, e)}
-                name='agentAddress'
-                value={agentAddress}
-                id=''
-              >
-                <option value=''> MBL Agent address </option>
-                {addressData.map((item) => {
-                  return (
-                    <option
-                      value={item._id}
-                    >{`${item.city} ${item.country}`}</option>
-                  );
-                })}
-              </select>
-            </div>
-          </div> */}
 
           {/* Port load discharge etc */}
           <div className='grid grid-cols-3 gap-5 my-6'>
@@ -542,6 +392,7 @@ const MBL = ({ props }) => {
                 <select
                   className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
                   value={loadingPort}
+                  disabled={disableEdit}
                   onChange={(e) => handleShipmentChange(0, e)}
                   name='loadingPort'
                   id=''
@@ -549,7 +400,7 @@ const MBL = ({ props }) => {
                   <option value=''>Select Port</option>
                   {portsData.map((item, index) => {
                     return (
-                      <option value={item._id}>
+                      <option value={item._id} key={index}>
                         {item.portName + " " + item.portCode}{" "}
                       </option>
                     );
@@ -565,6 +416,7 @@ const MBL = ({ props }) => {
                 </label>
                 <select
                   className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
+                  disabled={disableEdit}
                   onChange={(e) => handleShipmentChange(0, e)}
                   name='dischargePort'
                   value={dischargePort}
@@ -573,7 +425,7 @@ const MBL = ({ props }) => {
                   <option value=''>Select Port</option>
                   {portsData.map((item, index) => {
                     return (
-                      <option value={item._id}>
+                      <option value={item._id} key={index}>
                         {item.portName + " " + item.portCode}{" "}
                       </option>
                     );
@@ -591,6 +443,7 @@ const MBL = ({ props }) => {
                 </label>
                 <input
                   type='text'
+                  disabled={disableEdit}
                   onChange={(e) => handleShipmentChange(0, e)}
                   name='vessel'
                   placeholder='Vessel'
@@ -605,6 +458,7 @@ const MBL = ({ props }) => {
                 </label>
                 <input
                   type='text'
+                  disabled={disableEdit}
                   onChange={(e) => handleShipmentChange(0, e)}
                   name='voyage'
                   value={voyage}
@@ -623,6 +477,7 @@ const MBL = ({ props }) => {
               </label>
               <select
                 className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 value={tradeType}
                 name='tradeType'
@@ -645,6 +500,7 @@ const MBL = ({ props }) => {
               <select
                 className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
                 value={freightType}
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 name='freightType'
                 id=''
@@ -669,6 +525,11 @@ const MBL = ({ props }) => {
               <select
                 className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
                 value={freightType}
+
+
+
+disabled={disableEdit}
+
                 onChange={(e) => handleShipmentChange(0, e)}
                 name='freightType'
                 id=''
@@ -691,6 +552,7 @@ const MBL = ({ props }) => {
               <input
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 value={shippingBillNumber}
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 type='text'
                 placeholder='Shipping Bill Number'
@@ -705,6 +567,7 @@ const MBL = ({ props }) => {
               <input
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 value={shippingBillDate}
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 type='text'
                 placeholder='Shipping Bill Date'
@@ -721,6 +584,7 @@ const MBL = ({ props }) => {
               <input
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 value={billEntryNumber}
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 type='text'
                 placeholder='Shipping Bill Number'
@@ -735,6 +599,7 @@ const MBL = ({ props }) => {
               <input
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 value={billEntryDate}
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 type='text'
                 placeholder='Shipping Bill Date'
@@ -751,6 +616,7 @@ const MBL = ({ props }) => {
               <input
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 value={freePOL}
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 type='text'
                 placeholder='Shipping Bill Number'
@@ -765,6 +631,7 @@ const MBL = ({ props }) => {
               <input
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 value={freePOD}
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 type='text'
                 placeholder='Shipping Bill Date'
@@ -786,6 +653,7 @@ const MBL = ({ props }) => {
               </label>
               <input
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 type='text'
                 value={exchangeRate}
@@ -804,6 +672,7 @@ const MBL = ({ props }) => {
               <input
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                 value={SOBdate}
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 type='text'
                 placeholder='exchange rate'
@@ -820,6 +689,7 @@ const MBL = ({ props }) => {
               </label>
               <input
                 className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+                disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 type='text'
                 value={etaPOD}
@@ -849,7 +719,7 @@ const MBL = ({ props }) => {
               } = item;
 
               return (
-                <div className='grid grid-cols-3 gap-5'>
+                <div className='grid grid-cols-3 gap-5' key={index}>
                   <div className=''>
                     <div className='flex flex-col'>
                       <label
@@ -861,6 +731,7 @@ const MBL = ({ props }) => {
                       <input
                         className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                         value={containerNumber}
+                        disabled={disableEdit}
                         onChange={(e) => handleContainerChange(0, index, e)}
                         type='text'
                         name='containerNumber'
@@ -876,6 +747,7 @@ const MBL = ({ props }) => {
                       <select
                         className='block bg-white px-2 w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
                         value={containerType}
+                        disabled={disableEdit}
                         onChange={(e) => handleContainerChange(0, index, e)}
                         name='containerType'
                         id=''
@@ -897,6 +769,7 @@ const MBL = ({ props }) => {
                         value={marksNumbers}
                         type='text'
                         name='marksNumbers'
+                        disabled={disableEdit}
                         onChange={(e) => handleContainerChange(0, index, e)}
                       />
                     </div>
@@ -912,6 +785,7 @@ const MBL = ({ props }) => {
                         value={lineSeal}
                         type='text'
                         name='lineSeal'
+                        disabled={disableEdit}
                         onChange={(e) => handleContainerChange(0, index, e)}
                       />
                     </div>
@@ -925,6 +799,7 @@ const MBL = ({ props }) => {
                       <input
                         className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                         value={shipperSeal}
+                        disabled={disableEdit}
                         onChange={(e) => handleContainerChange(0, index, e)}
                         type='text'
                         name='shipperSeal'
@@ -940,6 +815,7 @@ const MBL = ({ props }) => {
                       <input
                         className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                         value={customsSeal}
+                        disabled={disableEdit}
                         onChange={(e) => handleContainerChange(0, index, e)}
                         type='text'
                         name='customsSeal'
@@ -955,6 +831,7 @@ const MBL = ({ props }) => {
                       <input
                         className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                         value={hsCode}
+                        disabled={disableEdit}
                         onChange={(e) => handleContainerChange(0, index, e)}
                         type='text'
                         name='hsCode'
@@ -973,6 +850,7 @@ const MBL = ({ props }) => {
                       <input
                         className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                         value={pkgCount}
+                        disabled={disableEdit}
                         onChange={(e) => handleContainerChange(0, index, e)}
                         type='text'
                         name='pkgCount'
@@ -988,6 +866,7 @@ const MBL = ({ props }) => {
                       <input
                         className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                         value={pkgType}
+                        disabled={disableEdit}
                         onChange={(e) => handleContainerChange(0, index, e)}
                         type='text'
                         name='pkgType'
@@ -1005,6 +884,7 @@ const MBL = ({ props }) => {
                         rows={10}
                         className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                         value={description}
+                        disabled={disableEdit}
                         onChange={(e) => handleContainerChange(0, index, e)}
                         type='text'
                         name='description'
@@ -1022,6 +902,7 @@ const MBL = ({ props }) => {
                       <input
                         className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                         value={grossWeight}
+                        disabled={disableEdit}
                         onChange={(e) => handleContainerChange(0, index, e)}
                         type='text'
                         name='grossWeight'
@@ -1037,6 +918,7 @@ const MBL = ({ props }) => {
                       <input
                         className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                         value={netWeight}
+                        disabled={disableEdit}
                         onChange={(e) => handleContainerChange(0, index, e)}
                         type='text'
                         name='netWeight'
@@ -1052,6 +934,7 @@ const MBL = ({ props }) => {
                       <input
                         className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-[0.5px] px-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
                         value={volume}
+                        disabled={disableEdit}
                         onChange={(e) => handleContainerChange(0, index, e)}
                         type='text'
                         name='volume'
@@ -1073,6 +956,7 @@ const MBL = ({ props }) => {
             <label htmlFor=''>Remarks:</label>
             <textarea
               id=''
+              disabled={disableEdit}
               cols='30'
               rows='4'
               value={remarks}
@@ -1081,13 +965,24 @@ const MBL = ({ props }) => {
             ></textarea>
           </div>
         </form>
-
-        <button
-          className='bg-primary text-white font-semibold px-4 py-2 rounded-md '
-          onClick={submit}
-        >
-          Submit{" "}
-        </button>
+        <div className='flex gap-8 my-6'>
+          <button
+            className='bg-primary text-white font-semibold px-4 py-2  '
+            onClick={submit}
+            type='submit'
+          >
+            Submit
+          </button>
+          <button
+            className='bg-primary text-white font-semibold px-4 py-2  '
+            onClick={() => saveMBLData()}
+          >
+            Save
+          </button>
+          <button className='bg-red-500 text-white font-semibold px-4 py-2  '>
+            Reset
+          </button>
+        </div>
       </div>
 
       <div></div>
