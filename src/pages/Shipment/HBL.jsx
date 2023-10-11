@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { AiFillPlusCircle } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { searchCustomer } from "../../features/customerSlice";
-import { AiFillPlusCircle } from "react-icons/ai";
+import { createHbl } from "../../features/hblSlice";
 
 // place of receipt
 // place of delivery
@@ -21,9 +22,6 @@ const SearchField = ({ label, name, val, hblData, hblindex }) => {
 
   const handleClick = (e, customerId, addressId) => {
     const { key, val } = e.target.dataset;
-
-    console.log(customerId);
-    console.log(addressId);
 
     const data = [...hblData];
     data[hblindex][key] = customerId;
@@ -89,6 +87,7 @@ const HBL = ({ props }) => {
 
   // data from mbl form
   const commonData = JSON.parse(localStorage.getItem("mblData"));
+  console.log(commonData)
   const {
     receiptPlace,
     deliveryPlace,
@@ -104,15 +103,15 @@ const HBL = ({ props }) => {
     shiplineName,
     mblNumber,
     voyage,
-  } = commonData;
+  } = commonData || "";
 
   const initialHBL = {
-    HBLtype: "",
+    HBLtype: "static data",
     shiplineName: shiplineName,
     hblNumber: "",
     hblDate: "",
     mblNumber: mblNumber,
-    receiptPlace: receiptPlace,
+    receiptPlace: receiptPlace ||"",
     deliveryPlace: deliveryPlace,
     vessel: vessel,
     tradeType: "",
@@ -159,6 +158,8 @@ const HBL = ({ props }) => {
 
   const [hblData, setHblData] = useState([initialHBL]);
 
+  console.log(hblData)
+
   const handleChange = (e, hblindex) => {
     e.preventDefault();
     const data = [...hblData];
@@ -167,7 +168,19 @@ const HBL = ({ props }) => {
     setHblData(data);
   };
 
-  console.log(hblData);
+  useEffect(() => {
+    let total20gp = 0;
+    hblData.forEach((hblform) => {
+      const { containerDetails } = hblform;
+      containerDetails.forEach((container) => {
+        if (container.containerType === "20GP") {
+          total20gp++;
+        }
+      });
+    });
+    // console.log(total20gp);
+  }, [hblData]);
+
   const handleContainerChange = (e, hblindex, containerIndex) => {
     e.preventDefault();
     const { name, value } = e.target;
@@ -195,10 +208,20 @@ const HBL = ({ props }) => {
     setHblData(data);
   };
 
-  // console.log(hblData)
-
   const newHblForm = () => {
     setHblData((prev) => [...prev, initialHBL]);
+  };
+
+  // console.log(hblData.length)
+
+  const dispatch = useDispatch();
+  const submitHandler = () => {
+    hblData.forEach((singleHbl) => {
+      // console.log(singleHbl)
+      dispatch(createHbl(singleHbl));
+    });
+
+    // dispatch(createHBL())
   };
 
   return (
@@ -1016,9 +1039,30 @@ const HBL = ({ props }) => {
                 New HBL
               </button>
             </div>
+
+            <div>
+              <div>
+                <label htmlFor=''>Total 20GP Containers</label>
+              </div>
+            </div>
           </div>
         );
       })}
+
+      <div className='flex gap-8'>
+        <button
+          onClick={() => submitHandler()}
+          className='bg-green-500 font-semibold text-white px-2 py-1'
+        >
+          Submit
+        </button>
+        <button className='bg-green-500 font-semibold text-white px-2 py-1 '>
+          Save
+        </button>
+        <button className='bg-red-500 font-semibold text-white px-2 py-1 '>
+          Reset
+        </button>
+      </div>
     </div>
   );
 };

@@ -16,6 +16,7 @@ import HBL from "./pages/Shipment/HBL";
 import ShipmentData from "./pages/Shipment/ShipmentData";
 import CreateShipment from "./pages/Shipment/CreateShipment";
 import Test from "./test/Test";
+import CreateCustomer from "./pages/Master/User/CreateCustomer";
 
 function App() {
   const [expand, setExpand]= useState(true)
@@ -33,6 +34,8 @@ function App() {
               <Route index element={<User />} />
               <Route path='users' element={<User />} />
               <Route path='customers' element={<Customer />} />
+              <Route path='createcustomer' element={<CreateCustomer />} />
+
             </Route>
             <Route path='/shipment' element={<ShipmentNavbar />}>
               <Route index element={<ShipmentData />} />
