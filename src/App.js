@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Dashboard from "./pages/Dashboard/Dashboard";
 
@@ -8,8 +8,8 @@ import { MasterNavbar, ShipmentNavbar } from "./pages/Navbar/Navbar";
 import Customer from "./pages/Master/User/Customer";
 import Settings from "./pages/Settings/Settings";
 
- import { ToastContainer, toast } from "react-toastify";
- import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 import MBL from "./pages/Shipment/MBL";
 import HBL from "./pages/Shipment/HBL";
@@ -17,11 +17,12 @@ import ShipmentData from "./pages/Shipment/ShipmentData";
 import CreateShipment from "./pages/Shipment/CreateShipment";
 import Test from "./test/Test";
 import CreateCustomer from "./pages/Master/User/CreateCustomer";
+import ViewShipment from "./pages/Shipment/ViewShipment";
 
 function App() {
-  const [expand, setExpand]= useState(true)
+  const [expand, setExpand] = useState(true);
   return (
-    <div className="flex">
+    <div className='flex'>
       <BrowserRouter>
         <div className={`w-2/12 top-0 mr-[0.5px] flex`}>
           <Sidebar expand={expand} setExpand={setExpand} />
@@ -35,12 +36,15 @@ function App() {
               <Route path='users' element={<User />} />
               <Route path='customers' element={<Customer />} />
               <Route path='createcustomer' element={<CreateCustomer />} />
-
             </Route>
             <Route path='/shipment' element={<ShipmentNavbar />}>
               <Route index element={<ShipmentData />} />
               <Route path='createshipment' element={<CreateShipment />} />
               {/* <Route path="hbl" element={<HBL />} /> */}
+              <Route
+                path='viewShipment/:mblId'
+                element={<ViewShipment />}
+              />
             </Route>
             <Route path='/settings' element={<Settings />}></Route>
             <Route path='/test' element={<Test />} />

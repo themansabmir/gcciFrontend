@@ -1,8 +1,11 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createDraftSafeSelector,
+  createSlice,
+} from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
+import { mblUrl, mblbyID } from "../api/apiEndpoints";
 import api from "../api/axiosInstance";
-import { mblUrl } from "../api/apiEndpoints";
-import { useSelector } from "react-redux";
 
 export const createMBL = createAsyncThunk(
   "mbl/create",
@@ -28,11 +31,25 @@ export const getAllMBL = createAsyncThunk(
   }
 );
 
+export const getMBLbyid = createAsyncThunk(
+  "mblbyId",
+  async (data, { rejectWithValue }) => {
+    try {
+      const res =await api.post(mblbyID, data).then((res) => res.data);
+  
+      return res.data
+    } catch (error) {
+      rejectWithValue(error.message);
+    }
+  }
+);
+
 const initialState = {
   isLoading: false,
   error: "",
   mblData: [],
   respone: "",
+  singleMBL:""
 };
 
 const mblSlice = createSlice({
@@ -61,10 +78,21 @@ const mblSlice = createSlice({
       .addCase(getAllMBL.rejected, (state, action) => {
         state.error = action.payload;
       });
+
+
+    builder.addCase(getMBLbyid.fulfilled, (state, action) => {
+      state.singleMBL = action.payload
+      state.isLoading = false
+    }).addCase(getMBLbyid.pending, (state, action) => {
+      state.isLoading =true
+    }).addCase(getMBLbyid.rejected, (state, action) => {
+      state.error = action.payload
+    })
+      ;
   },
 });
 
-
-export const shipmentData = state=> state?.mbl?.mblData
+export const shipmentData = (state) => state?.mbl?.mblData;
+export const singleMBL = (state) => state?.mbl?.singleMBL
 
 export default mblSlice.reducer;

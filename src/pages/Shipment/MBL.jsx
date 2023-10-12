@@ -95,7 +95,7 @@ const MBL = ({ props }) => {
     freightType,
     exchangeRate,
     SOBdate,
-    etaPOD,
+    etaPod,
     transhipmentPort,
     shippingBillNumber,
     shippingBillDate,
@@ -692,9 +692,9 @@ disabled={disableEdit}
                 disabled={disableEdit}
                 onChange={(e) => handleShipmentChange(0, e)}
                 type='text'
-                value={etaPOD}
+                value={etaPod}
                 placeholder='exchange rate'
-                name='etaPOD'
+                name='etaPod'
               />
             </div>
           </div>

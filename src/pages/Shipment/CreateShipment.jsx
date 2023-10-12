@@ -33,7 +33,7 @@ const CreateShipment = () => {
       freightType: "",
       exchangeRate: "",
       SOBdate: "",
-      etaPOD: "",
+      etaPod: "",
       transhipmentPort: "",
       shippingBillNumber: "",
       shippingBillDate: "",
