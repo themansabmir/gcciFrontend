@@ -55,7 +55,8 @@ const Table = ({ data, columns }) => {
           {table.getRowModel().rows.map((row) => (
             <tr
               key={row.id}
-              className='border-b border-gray last:border-0 hover:bg-gray-50 cursor-pointer '
+
+              className='border-b border-b-gray-300 hover:border-l-8  hover:border-l-green-500 last:border-0 hover:bg-gray-50 cursor-pointer  '
             >
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id} className='py-2 font-normal px-4'>

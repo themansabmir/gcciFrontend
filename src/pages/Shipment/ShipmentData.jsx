@@ -3,10 +3,10 @@ import { FiEdit2 } from "react-icons/fi";
 
 import { AiOutlineDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import View from "../../assets/view.png";
 import Table from "../../components/Table/Table";
 import { getAllMBL, shipmentData } from "../../features/mblSlice";
-import { useNavigate } from "react-router-dom";
 const ShipmentData = () => {
   const data = useSelector(shipmentData);
   const dispatch = useDispatch();
@@ -61,9 +61,10 @@ const ShipmentData = () => {
           >
             <img src={View} className='h-4 w-4' alt='' />
           </button>
-          <button>
+          <Link to={"createshipment/"+row?.original?._id}>
             <FiEdit2 />
-          </button>
+          </Link>
+
           <button>
             <AiOutlineDelete className='text-red-500 font-bold text-lg' />
           </button>

@@ -6,7 +6,6 @@ import { getMBLbyid, singleMBL } from "../../features/mblSlice";
 export const ViewMBL = () => {
   const mblData = useSelector(singleMBL);
 
-  console.log(mblData);
   const {
     shipmentMedium,
     shipmentType,
@@ -213,8 +212,7 @@ export const ViewMBL = () => {
                 <span>{dischargePort.portName}</span>
               </label>
             </div>
-          </div>
-            <div className='grid grid-cols-5 col-span-3 my-2 bg-gray-200 text-sm'>
+            <div className='grid grid-cols-2  my-2 bg-gray-200 text-sm'>
               <label htmlFor=''>
                 Ocean Vessel/Voyage <br />{" "}
                 <span>
@@ -227,6 +225,124 @@ export const ViewMBL = () => {
                 <span>{deliveryPlace.toUpperCase()}</span>
               </label>
             </div>
+          </div>
+          <div className='col-span-2'>
+            <div className='grid grid-cols-2 bg-gray-200 ml-5 px-2 py-1 mb-4'>
+              <p>Shipping Line: {shiplineName}</p>
+              <p>Shipment Mode:{shipmentMode}</p>
+              <p>Shipping Bill Number:{shippingBillNumber}</p>
+              <p>Shipping Bill Date: {shippingBillDate}</p>
+              <p>SOB Date{SOBdate}</p>
+              <p>Booking Number:{bookingNumber}</p>
+            </div>
+            <div>
+              {containerDetails.map((container, i) => {
+                console.log(container);
+                const {
+                  containerNumber,
+                  containerType,
+                  description,
+                  hsCode,
+                  customsSeal,
+                  pkgCount,
+                  pkgType,
+                  volume,
+                  shipperSeal,
+                  lineSeal,
+                  grossWeight,
+                } = container;
+                return (
+                  <div className='bg-gray-200 mb-5 ml-5 px-3 py-2  '>
+                    <div className='flex gap-4'>
+                      <p>
+                        Container Number:{" "}
+                        <span className='font-semibold text-black text-base'>
+                          {}
+                          {containerNumber}
+                        </span>{" "}
+                      </p>
+                      <p className='font-semibold text-black text-base'>
+                        {" "}
+                        | {containerType}
+                      </p>
+                    </div>
+                    <div className='grid grid-cols-3 gap-4 mb-2'>
+                      <p>
+                        Pkg Type:{" "}
+                        <span className='font-semibold text-black text-base'>
+                          {}
+                          {pkgType}
+                        </span>{" "}
+                      </p>
+                      <p>
+                        Pkg Count:{" "}
+                        <span className='font-semibold text-black text-base'>
+                          {}
+                          {pkgCount}
+                        </span>{" "}
+                      </p>
+                      <p>
+                        HS Code:{" "}
+                        <span className='font-semibold text-black text-base'>
+                          {}
+                          {hsCode}
+                        </span>{" "}
+                      </p>
+                    </div>
+                    <div className='grid grid-cols-3 gap-4'>
+                      <p>
+                        Line Seal:{" "}
+                        <span className='font-semibold text-black text-base'>
+                          {}
+                          {lineSeal}
+                        </span>{" "}
+                      </p>
+                      <p>
+                        Custom Seal:{" "}
+                        <span className='font-semibold text-black text-base'>
+                          {}
+                          {customsSeal}
+                        </span>{" "}
+                      </p>
+                      <p>
+                        Shipper Seal:{" "}
+                        <span className='font-semibold text-black text-base'>
+                          {}
+                          {shipperSeal}
+                        </span>{" "}
+                      </p>
+                    </div>
+                    <div className='grid grid-cols-3 gap-4 mt-2'>
+                      <p>
+                        Volume:{" "}
+                        <span className='font-semibold text-black text-base'>
+                          {}
+                          {volume}
+                        </span>{" "}
+                      </p>
+                      <p>
+                        Gross Weight:{" "}
+                        <span className='font-semibold text-black text-base'>
+                          {}
+                          {grossWeight}
+                        </span>{" "}
+                      </p>
+                    </div>
+                    <div className='w-full  break-all '>
+                      <p className=''>
+                        Description:{" "}
+                        <h1 className='font-semibold text-black text-base  '>
+                          {}
+
+                          {description}
+                        </h1>{" "}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       )}
     </>

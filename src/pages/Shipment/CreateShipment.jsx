@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import MBL from "./MBL";
-import HBL from "./HBL";
 import { useDispatch, useSelector } from "react-redux";
-import { getCustomer } from "../../features/customerSlice";
 import { getAddress } from "../../features/addressSlice";
+import { getCustomer } from "../../features/customerSlice";
 import { getPorts } from "../../features/portSlice";
+import HBL from "./HBL";
+import MBL from "./MBL";
+import { useParams } from "react-router-dom";
+import { getMBLbyid } from "../../features/mblSlice";
 
 const CreateShipment = () => {
   const dispatch = useDispatch();
@@ -15,6 +17,8 @@ const CreateShipment = () => {
   const customerData = useSelector((state) => state.customer.customerData);
   const addressData = useSelector((state) => state.address.addressData);
   const portsData = useSelector((state) => state.port.portData);
+
+  const { mblId } = useParams();
 
   const [shipmentData, setShipmentData] = useState([
     {
@@ -51,7 +55,7 @@ const CreateShipment = () => {
       agentAddress: "",
       loadingPort: "",
       dischargePort: "",
-      remarks:"",
+      remarks: "",
       containerDetails: [
         {
           containerNumber: "",
@@ -76,15 +80,39 @@ const CreateShipment = () => {
     e.preventDefault();
     const data = [...shipmentData];
     const { name, value } = e.target;
+
     data[index][name] = value;
     setShipmentData(data);
   };
+
+  useEffect(() => {
+    const res = dispatch(getMBLbyid({ mblId: mblId })).then((data) => {
+      const { payload } = data;
+      const newPayload = { ...payload };
+      return newPayload;
+
+      // if (newPayload) {
+
+      //   setShipmentData([newPayload]);
+      // }
+    });
+    Promise.resolve(res).then((data) => {
+
+      if (data?.containerDetails?.length>0) {
+        console.log(data)
+        const newData={...data, loadingPort: data.loadingPort?._id, dischargePort:data?.dischargePort._id}
+
+        setShipmentData([newData])
+      }
+
+
+    })
+  }, []);
 
   const handleClick = (mainIndex, index, e, item, elem) => {
     const { key, val } = e.target.dataset;
 
     let data = [...shipmentData];
-
 
     data[mainIndex][key] = item;
     data[mainIndex][val] = elem;
@@ -160,9 +188,7 @@ const CreateShipment = () => {
         {tabsData.map((item, index) => (
           <li
             className={`cursor-pointer list-none my-2 px-8 py-2 text-xl ml-5  ${
-              tabs === index
-                ? `bg-primary  text-white  shadow-md `
-                : ""
+              tabs === index ? `bg-primary  text-white  shadow-md ` : ""
             } `}
             key={index}
             onClick={() => setTabs(index)}

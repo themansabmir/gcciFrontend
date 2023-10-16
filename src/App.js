@@ -40,6 +40,7 @@ function App() {
             <Route path='/shipment' element={<ShipmentNavbar />}>
               <Route index element={<ShipmentData />} />
               <Route path='createshipment' element={<CreateShipment />} />
+              <Route path='createshipment/:mblId' element={<CreateShipment />} />
               {/* <Route path="hbl" element={<HBL />} /> */}
               <Route
                 path='viewShipment/:mblId'
