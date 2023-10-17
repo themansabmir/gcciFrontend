@@ -6,17 +6,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import View from "../../assets/view.png";
 import Table from "../../components/Table/Table";
-import { getAllMBL, shipmentData } from "../../features/mblSlice";
+import { shipmentData } from "../../features/shipmentSlice";
+import { getShipmentByType } from "../../features/shipmentSlice";
+
 const ShipmentData = () => {
   const data = useSelector(shipmentData);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getAllMBL());
+    dispatch(getShipmentByType({ shipmentType: "import" }));
   }, [dispatch]);
 
-  const mblDataColumns = [
+  const shipmentColumns = [
     {
       header: "S.No",
       accessorKey: "createdAt",
@@ -27,8 +29,8 @@ const ShipmentData = () => {
       accessorKey: "shiplineName",
     },
     {
-      header: "MBL Number",
-      accessorKey: "mblNumber",
+      header: "Shipment Type",
+      accessorKey: "shipmentType",
     },
     {
       header: "SOB",
@@ -61,7 +63,7 @@ const ShipmentData = () => {
           >
             <img src={View} className='h-4 w-4' alt='' />
           </button>
-          <Link to={"createshipment/"+row?.original?._id}>
+          <Link to={"createshipment/" + row?.original?._id}>
             <FiEdit2 />
           </Link>
 
@@ -75,8 +77,25 @@ const ShipmentData = () => {
 
   return (
     <div>
+      <div className="flex justify-between mx-1">
+
+      <select
+        name=''
+        id=''
+        onChange={(e) =>
+          dispatch(getShipmentByType({ shipmentType: e.target.value }))
+        }
+      >
+        <option value='import'>Import</option>
+        <option value='export'>Export</option>
+        </select>
+        <div className="bg-font rounded px-3 py-1 text-white font-semibold capitalize">
+
+        <Link to={"/newShipment"} >Create Shipment</Link>
+        </div>
+      </div>
       <div>
-        {shipmentData && <Table columns={mblDataColumns} data={data} />}
+        {shipmentData && <Table columns={shipmentColumns} data={data} />}
       </div>
     </div>
   );

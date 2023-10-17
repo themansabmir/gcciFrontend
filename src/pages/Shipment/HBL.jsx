@@ -87,7 +87,7 @@ const HBL = ({ props }) => {
 
   // data from mbl form
   const commonData = JSON.parse(localStorage.getItem("mblData"));
-  console.log(commonData)
+
   const {
     receiptPlace,
     deliveryPlace,

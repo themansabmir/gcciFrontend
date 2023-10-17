@@ -18,7 +18,7 @@ const CreateShipment = () => {
   const addressData = useSelector((state) => state.address.addressData);
   const portsData = useSelector((state) => state.port.portData);
 
-  const { mblId } = useParams();
+  const { shipmentId } = useParams();
 
   const [shipmentData, setShipmentData] = useState([
     {
@@ -85,29 +85,6 @@ const CreateShipment = () => {
     setShipmentData(data);
   };
 
-  useEffect(() => {
-    const res = dispatch(getMBLbyid({ mblId: mblId })).then((data) => {
-      const { payload } = data;
-      const newPayload = { ...payload };
-      return newPayload;
-
-      // if (newPayload) {
-
-      //   setShipmentData([newPayload]);
-      // }
-    });
-    Promise.resolve(res).then((data) => {
-
-      if (data?.containerDetails?.length>0) {
-        console.log(data)
-        const newData={...data, loadingPort: data.loadingPort?._id, dischargePort:data?.dischargePort._id}
-
-        setShipmentData([newData])
-      }
-
-
-    })
-  }, []);
 
   const handleClick = (mainIndex, index, e, item, elem) => {
     const { key, val } = e.target.dataset;

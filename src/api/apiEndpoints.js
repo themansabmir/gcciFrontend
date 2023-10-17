@@ -5,4 +5,6 @@ export const addressUrl = 'api/address'
 export const customerUrl = 'api/customer'
 export const mblUrl = 'api/mbl'
 export const mblbyID ='api/mblbyid'
-export const hblUrl="api/hbl"
+export const hblUrl = "api/hbl"
+export const shipmentBytype = "api/shipmentbytype"
+export const mblbyShipmentid = "api/mblbyshipment";

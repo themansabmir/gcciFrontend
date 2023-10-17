@@ -18,6 +18,7 @@ import CreateShipment from "./pages/Shipment/CreateShipment";
 import Test from "./test/Test";
 import CreateCustomer from "./pages/Master/User/CreateCustomer";
 import ViewShipment from "./pages/Shipment/ViewShipment";
+import NewShipment from "./pages/Shipment/NewShipment";
 
 function App() {
   const [expand, setExpand] = useState(true);
@@ -40,13 +41,14 @@ function App() {
             <Route path='/shipment' element={<ShipmentNavbar />}>
               <Route index element={<ShipmentData />} />
               <Route path='createshipment' element={<CreateShipment />} />
-              <Route path='createshipment/:mblId' element={<CreateShipment />} />
+              <Route path='createshipment/:shipmentId' element={<CreateShipment />} />
               {/* <Route path="hbl" element={<HBL />} /> */}
               <Route
                 path='viewShipment/:mblId'
                 element={<ViewShipment />}
               />
             </Route>
+            <Route path="/newShipment" element={<NewShipment />} />
             <Route path='/settings' element={<Settings />}></Route>
             <Route path='/test' element={<Test />} />
           </Routes>
