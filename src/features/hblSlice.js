@@ -15,11 +15,25 @@ export const createHbl = createAsyncThunk(
   }
 );
 
+export const updateHbl = createAsyncThunk(
+  "hbl/put",
+  async (data, { rejectWithValue }) => {
+    try {
+      const res = await api.put(hblUrl, data).then((res) => res.data);
+      return res.data;
+    } catch (error) {
+      rejectWithValue(error.message);
+    }
+  }
+);
+
 export const hblbyShipment = createAsyncThunk(
   "hbl/byship",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await api.post(hblbyShipmentUrl, data).then((res) => res.data);
+      const res = await api
+        .post(hblbyShipmentUrl, data)
+        .then((res) => res.data);
       return res.data;
     } catch (error) {
       return rejectWithValue(error.message);

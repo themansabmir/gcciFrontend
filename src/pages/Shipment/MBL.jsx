@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { searchCustomer } from "../../features/customerSlice";
 import { createMBL, getMBLbyShipmentId } from "../../features/mblSlice";
-
+import _ from "lodash";
 import { saveFields } from "../../features/mblSlice";
+import { deepClone } from "../../utils/utility";
 
 export const Field = ({
   props,
@@ -22,7 +23,6 @@ export const Field = ({
   const customerData = useSelector((state) => state.customer.customerData);
 
   // const { handleClick } = props;
-
 
   const [result, setResult] = useState(name && name + address);
 
@@ -160,7 +160,8 @@ const MBL = () => {
     setMbl(data);
   };
   const handleContainerChange = (ignore, index, e) => {
-    const data = { ...mbl };
+    let data = { ...mbl };
+    data = deepClone(mbl)
     const { name, value } = e.target;
     data.containerDetails[index][name] = value;
     setMbl(data);
@@ -209,19 +210,21 @@ const MBL = () => {
 
   const portsData = useSelector((state) => state.port.portData);
 
-  const loader= useSelector((state) => state?.shipment?.isLoading)
+  const loader = useSelector((state) => state?.shipment?.isLoading);
 
   useEffect(() => {
     dispatch(getMBLbyShipmentId({ shipmentId: shipmentId })).then(
       ({ payload }) => {
         if (payload[0]?.containerDetails?.length > 0) {
-          setMbl(payload[0]);
-          dispatch(saveFields(payload[0]));
+          const data = deepClone(payload[0]);
+
+          setMbl(data);
+          dispatch(saveFields(data));
         }
       }
     );
   }, [dispatch]);
-  if (loader)  return "Loading"
+  if (loader) return "Loading";
 
   return (
     <>
@@ -1099,7 +1102,9 @@ disabled={disableEdit}
 
           <div></div>
         </div>
-      ):"Loading"}
+      ) : (
+        "Loading"
+      )}
     </>
   );
 };

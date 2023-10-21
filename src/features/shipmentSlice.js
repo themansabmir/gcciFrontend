@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import api from "../api/axiosInstance";
 import { shipmentBytype } from "../api/apiEndpoints";
-import { LuArrowUpNarrowWide } from "react-icons/lu";
+
 
 export const getShipmentByType = createAsyncThunk(
   "shipment/get",

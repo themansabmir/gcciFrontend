@@ -152,6 +152,10 @@ const CreateShipment = () => {
       label: "HBL",
       content: <HBL props={props} />,
     },
+    {
+      label: "Logs",
+      content:""
+    }
   ];
 
   useEffect(() => {

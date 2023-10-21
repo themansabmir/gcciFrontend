@@ -38,7 +38,7 @@ function App() {
               <Route path='customers' element={<Customer />} />
               <Route path='createcustomer' element={<CreateCustomer />} />
             </Route>
-            <Route path='/shipment' element={<ShipmentNavbar />}>
+            <Route path='/shipment' element={""}>
               <Route index element={<ShipmentData />} />
               <Route path='createshipment' element={<CreateShipment />} />
               <Route path='createshipment/:shipmentId' element={<CreateShipment />} />

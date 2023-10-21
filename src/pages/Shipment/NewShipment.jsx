@@ -10,6 +10,7 @@ const NewShipment = () => {
     deliveryPlace: "",
     etaPod: "",
     referenceNumber: "",
+    SOBdate:""
   });
 
   const handleInput = (e) => {
@@ -21,6 +22,7 @@ const NewShipment = () => {
     data[name] = value;
     setShipment(data);
   };
+  console.log(shipment)
 
   const dispatch = useDispatch();
   const submit = () => {
@@ -28,12 +30,17 @@ const NewShipment = () => {
   };
 
   return (
-    <div>
-      <div>
+    <div className='max-w-[700px] mx-auto bg-white mt-20 px-10 py-2 flex flex-col gap-3'>
+      <h1 className='text-[#7d7d7d] text-center text-2xl font-bold mb-5'>
+        {" "}
+        Create New Shipment
+      </h1>
+      <div className='grid grid-cols-2 '>
         <label htmlFor=''>Shipment Type</label>
         <select
           name='shipmentType'
           id=''
+          className='border-[#C3C3C3] border-2 rounded px-3 py-1 '
           value={shipment.shipmentType}
           onChange={(e) => handleInput(e)}
         >
@@ -42,7 +49,7 @@ const NewShipment = () => {
           <option value='export'>Export</option>
         </select>
       </div>
-      <div>
+      {/* <div>
         <label htmlFor=''>Number</label>
         <input
           type='text'
@@ -50,35 +57,48 @@ const NewShipment = () => {
           onChange={(e) => handleInput(e)}
           value={shipment.shipmentNumber}
         />
-      </div>
-      <div>
+      </div> */}
+      <div className='grid grid-cols-2 '>
         <label htmlFor=''> Shipping Line Name</label>
         <input
           type='text'
           name='shiplineName'
           value={shipment.shiplineName}
+          className='border-[#C3C3C3] border-2 rounded px-3 py-1 '
           onChange={(e) => handleInput(e)}
         />
       </div>
-      <div>
+      <div className='grid grid-cols-2 '>
         <label htmlFor=''> Final Delivery Place</label>
         <input
           type='text'
           name='deliveryPlace'
+          className='border-[#C3C3C3] border-2 rounded px-3 py-1 '
           value={shipment.deliveryPlace}
           onChange={(e) => handleInput(e)}
         />
       </div>
-      <div>
+      <div className='grid grid-cols-2 '>
         <label htmlFor=''> Eta POD</label>
         <input
           type='text'
+          className='border-[#C3C3C3] border-2 rounded px-3 py-1 '
           name='etaPod'
           value={shipment.etaPod}
           onChange={(e) => handleInput(e)}
         />
       </div>
-      <div>
+      <div className='grid grid-cols-2 '>
+        <label htmlFor=''> SOB date</label>
+        <input
+          type='date'
+          className='border-[#C3C3C3] border-2 rounded px-3 py-1 '
+          name='SOBdate'
+          value={shipment.SOBdate}
+          onChange={(e) => handleInput(e)}
+        />
+      </div>
+      {/* <div>
         <label htmlFor=''> Reference Number</label>
         <input
           type='text'
@@ -86,9 +106,9 @@ const NewShipment = () => {
           value={shipment.referenceNumber}
           onChange={(e) => handleInput(e)}
         />
-          </div>
+          </div> */}
 
-          <button onClick={submit}>Create</button>
+      <button onClick={submit}>Create</button>
     </div>
   );
 };

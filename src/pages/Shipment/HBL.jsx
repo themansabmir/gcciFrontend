@@ -3,7 +3,8 @@ import { AiFillPlusCircle } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { searchCustomer } from "../../features/customerSlice";
-import { createHbl, hblbyShipment } from "../../features/hblSlice";
+import { createHbl, hblbyShipment, updateHbl } from "../../features/hblSlice";
+import { deepClone } from "../../utils/utility";
 
 // place of receipt
 // place of delivery
@@ -215,7 +216,7 @@ const HBL = ({ props }) => {
   const handleContainerChange = (e, hblindex, containerIndex) => {
     e.preventDefault();
     const { name, value } = e.target;
-    const data = [...hblData];
+    const data = [...hblData].map((item) => deepClone(item));
     data[hblindex].containerDetails[containerIndex][name] = value;
     setHblData(data);
   };
@@ -247,9 +248,15 @@ const HBL = ({ props }) => {
 
   const submitHandler = () => {
     hblData.forEach((singleHbl) => {
-      const data ={...singleHbl, shipmentId}
+      const data = { ...singleHbl, shipmentId };
+
+      if (data?._id) {
+        dispatch(updateHbl(data));
+        // console.log("run update function")
+      } else {
+        dispatch(createHbl(data));
+      }
       // console.log(singleHbl)
-      dispatch(createHbl(data));
     });
 
     // dispatch(createHBL())
@@ -349,8 +356,8 @@ const HBL = ({ props }) => {
                   hblIndex={hblindex}
                   fieldname={"notifyName"}
                   fieldaddress={"notifyAddress"}
-                  name={consigneeName}
-                  address={consigneeAddress}
+                  name={notifyName}
+                  address={notifyAddress}
                   Id={"notifyId"}
                   AddressId={"notifyAddressId"}
                   handleClick={handleClick}
