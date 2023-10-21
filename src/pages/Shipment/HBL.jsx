@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { searchCustomer } from "../../features/customerSlice";
-import { createHbl } from "../../features/hblSlice";
+import { createHbl, hblbyShipment } from "../../features/hblSlice";
 
 // place of receipt
 // place of delivery
@@ -16,20 +17,37 @@ import { createHbl } from "../../features/hblSlice";
 // eta pod
 // shipping line name
 
-const SearchField = ({ label, name, val, hblData, hblindex }) => {
+const SearchField = ({
+  // val,
+  // hblData,
+  // hblindex,
+  name,
+  address,
+  Id,
+  AddressId,
+  fieldname,
+  fieldaddress,
+  label,
+  handleClick,
+  hblIndex,
+}) => {
   const dispatch = useDispatch();
   const customerData = useSelector((state) => state.customer.customerData);
 
-  const handleClick = (e, customerId, addressId) => {
-    const { key, val } = e.target.dataset;
+  // const handleClick = (e, customerId, addressId) => {
+  //   const { key, val } = e.target.dataset;
 
-    const data = [...hblData];
-    data[hblindex][key] = customerId;
-    data[hblindex][val] = addressId;
-  };
+  //   const data = [...hblData];
+  //   data[hblindex][key] = customerId;
+  //   data[hblindex][val] = addressId;
+  // };
 
-  const [result, setResult] = useState();
+  const [result, setResult] = useState(name + address);
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setResult(name + address);
+  }, [name, address]);
 
   return (
     <div className='w-full'>
@@ -55,11 +73,13 @@ const SearchField = ({ label, name, val, hblData, hblindex }) => {
                 return item.customerAddress.map((elem, index) => {
                   return (
                     <li
-                      data-key={name}
-                      data-val={val}
+                      data-id={Id}
+                      data-addressid={AddressId}
+                      data-fieldname={fieldname}
+                      data-fieldaddress={fieldaddress}
                       className='hover:bg-slate-300 w-full px-5 py-2  cursor-pointer'
                       onClick={(e) => {
-                        handleClick(e, item._id, elem._id);
+                        handleClick(hblIndex, e, item, elem);
 
                         setResult(`${item.companyName}
 ${elem.address}${elem.city}${elem.country}
@@ -81,12 +101,28 @@ ${item.fax}`);
 };
 
 const HBL = ({ props }) => {
+  const { shipmentId } = useParams();
+  const dispatch = useDispatch();
   const customerData = useSelector((state) => state.customer.customerData);
   const addressData = useSelector((state) => state.address.addressData);
   const portsData = useSelector((state) => state.port.portData);
 
-  // data from mbl form
-  const commonData = JSON.parse(localStorage.getItem("mblData"));
+  const commonFields = useSelector((state) => state?.mbl?.similarFields);
+  // const commonData = JSON.parse(localStorage.getItem("mblData"));
+
+  const handleClick = (hblindex, e, item, elem) => {
+    const data = [...hblData];
+    const { id, addressid, fieldname, fieldaddress } = e.target.dataset;
+
+    data[hblindex][id] = item?._id;
+    data[hblindex][addressid] = elem?._id;
+    data[hblindex][fieldname] = item?.companyName;
+    data[hblindex][
+      fieldaddress
+    ] = `${elem.address} ${elem.city} ${elem.country} ${elem.gstNumber} ${elem.pinCode}`;
+
+    setHblData(data);
+  };
 
   const {
     receiptPlace,
@@ -99,66 +135,74 @@ const HBL = ({ props }) => {
     SOBdate,
     freePOD,
     freePOL,
-    etaPOD,
+    etaPod,
     shiplineName,
     mblNumber,
     voyage,
-  } = commonData || "";
-
+  } = commonFields || "";
   const initialHBL = {
-    HBLtype: "static data",
     shiplineName: shiplineName,
+    mblNumber: mblNumber,
+    HBLtype: "",
     hblNumber: "",
     hblDate: "",
-    mblNumber: mblNumber,
-    receiptPlace: receiptPlace ||"",
-    deliveryPlace: deliveryPlace,
+    receiptPlace: receiptPlace,
     vessel: vessel,
+    voyage: voyage,
     tradeType: "",
     freightType: "",
-    voyage: voyage,
     exchangeRate: exchangeRate,
-    SOBdate: SOBdate,
-    etaPOD: etaPOD,
     transhipmentPort: transhipmentPort,
+    SOBdate: SOBdate,
     shippingBillNumber: "",
     shippingBillDate: "",
     billEntryNumber: "",
     billEntryDate: "",
     freePOL: freePOL,
     freePOD: freePOD,
-    shipperName: "",
-    shipperAddress: "",
-    consigneeName: "",
-    consigneeAddress: "",
-    notifyName: "",
-    notifyAddress: "",
-    agentName: "",
     goodsType: "",
-    agentAddress: "",
-    loadingPort: loadingPort,
-    dischargePort: dischargePort,
     containerDetails: [
       {
         containerNumber: "",
         containerType: "",
-        lineSeal: "",
-        shipperSeal: "",
-        customsSeal: "",
         pkgCount: "",
         pkgType: "",
         grossWeight: "",
         netWeight: "",
         volume: "",
+        lineSeal: "",
+        shipperSeal: "",
+        customsSeal: "",
         description: "",
         hsCode: "",
       },
     ],
+    shipperId: "",
+    ShipperName: "",
+    shipperAddressId: "",
+    shipperAddress: "",
+    consigneeId: "",
+    consigneeName: "",
+    consigneeAddressId: "",
+    consigneeAddress: "",
+    notifyId: "",
+    notifyName: "",
+    notifyAddressId: "",
+    notifyAddress: "",
+    agentId: "",
+    agentName: "",
+    agentAddressId: "",
+    agentAddress: "",
+    shipmentId: "",
+    loadingPort: loadingPort,
+    dischargePort: dischargePort,
+    deliveryPlace: deliveryPlace,
+    etaPod: etaPod,
   };
 
   const [hblData, setHblData] = useState([initialHBL]);
 
-  console.log(hblData)
+  // data from mbl form
 
   const handleChange = (e, hblindex) => {
     e.preventDefault();
@@ -167,19 +211,6 @@ const HBL = ({ props }) => {
     data[hblindex][name] = value;
     setHblData(data);
   };
-
-  useEffect(() => {
-    let total20gp = 0;
-    hblData.forEach((hblform) => {
-      const { containerDetails } = hblform;
-      containerDetails.forEach((container) => {
-        if (container.containerType === "20GP") {
-          total20gp++;
-        }
-      });
-    });
-    // console.log(total20gp);
-  }, [hblData]);
 
   const handleContainerChange = (e, hblindex, containerIndex) => {
     e.preventDefault();
@@ -214,32 +245,73 @@ const HBL = ({ props }) => {
 
   // console.log(hblData.length)
 
-  const dispatch = useDispatch();
   const submitHandler = () => {
     hblData.forEach((singleHbl) => {
+      const data ={...singleHbl, shipmentId}
       // console.log(singleHbl)
-      dispatch(createHbl(singleHbl));
+      dispatch(createHbl(data));
     });
 
     // dispatch(createHBL())
   };
 
+  useEffect(() => {
+    dispatch(hblbyShipment({ shipmentId: shipmentId })).then(({ payload }) => {
+      if (payload.length > 0) {
+        const arr = payload.map((item, i) =>
+          Object.assign({ ...commonFields }, item)
+        );
+        setHblData(arr);
+      }
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+    let total20gp = 0;
+    hblData.forEach((hblform) => {
+      const { containerDetails } = hblform;
+      containerDetails.forEach((container) => {
+        if (container.containerType === "20GP") {
+          total20gp++;
+        }
+      });
+    });
+    // console.log(total20gp);
+  }, []);
+
+  console.log(hblData);
   return (
     <div className='w-full min-h-screen mx-auto px-10 bg-gray-300'>
       {hblData.map((hblForm, hblindex) => {
         const {
-          //   receiptPlace,
-          //   deliveryPlace,
-          //   loadingPort,
-          //   dischargePort,
-          //   vessel,
-          //   transhipmentPort,
-          //   exchangeRate,
-          //   SOBdate,
-          //   freePOD,
-          //   freePOL,
-          //   etaPOD,
-          //   shiplineName,
+          receiptPlace,
+          deliveryPlace,
+          loadingPort,
+          dischargePort,
+          vessel,
+          transhipmentPort,
+          exchangeRate,
+          SOBdate,
+          freePOD,
+          shipperId,
+          ShipperName,
+          shipperAddress,
+          shipperAddressId,
+          consigneeName,
+          consigneeAddress,
+          consigneeAddressId,
+          consigneeId,
+          agentAddress,
+          agentAddressId,
+          agentId,
+          agentName,
+          notifyAddress,
+          notifyAddressId,
+          notifyId,
+          notifyName,
+          freePOL,
+          etaPod,
+          shiplineName,
           containerDetails,
         } = hblForm;
 
@@ -252,24 +324,36 @@ const HBL = ({ props }) => {
               {/*first column shipper consingee fields  */}
               <div className='col-span-1'>
                 <SearchField
-                  hblData={hblData}
-                  hblindex={hblindex}
-                  name={"shipperName"}
-                  val={"shipperAddress"}
+                  hblIndex={hblindex}
+                  fieldname={"shipperName"}
+                  fieldaddress={"shipperAddress"}
+                  name={ShipperName}
+                  address={shipperAddress}
+                  Id={"shipperId"}
+                  AddressId={"shipperAddressId"}
                   label={"Shipper"}
+                  handleClick={handleClick}
                 />
                 <SearchField
-                  hblData={hblData}
-                  hblindex={hblindex}
-                  name={"consigneeName"}
-                  val={"consigneeAddress"}
+                  hblIndex={hblindex}
+                  fieldname={"consigneeName"}
+                  fieldaddress={"consigneeAddress"}
+                  name={consigneeName}
+                  address={consigneeAddress}
+                  Id={"consigneeId"}
+                  AddressId={"consigneeAddressId"}
+                  handleClick={handleClick}
                   label={"Consignee"}
                 />
                 <SearchField
-                  hblData={hblData}
-                  hblindex={hblindex}
-                  name={"notifyName"}
-                  val={"notifyAddress"}
+                  hblIndex={hblindex}
+                  fieldname={"notifyName"}
+                  fieldaddress={"notifyAddress"}
+                  name={consigneeName}
+                  address={consigneeAddress}
+                  Id={"notifyId"}
+                  AddressId={"notifyAddressId"}
+                  handleClick={handleClick}
                   label={"Notify"}
                 />
               </div>
@@ -294,10 +378,14 @@ const HBL = ({ props }) => {
 
                   <div>
                     <SearchField
-                      hblData={hblData}
-                      hblindex={hblindex}
-                      name={"agentName"}
-                      val={"agentAddress"}
+                      hblIndex={hblindex}
+                      fieldname={"agentName"}
+                      fieldaddress={"agentAddress"}
+                      name={agentName}
+                      address={agentAddress}
+                      Id={"agentId"}
+                      AddressId={"agentAddressId"}
+                      handleClick={handleClick}
                       label={"Agent"}
                     />
                   </div>
@@ -459,7 +547,6 @@ const HBL = ({ props }) => {
                       type='text'
                       name=''
                       id=''
-                      defaultValue={transhipmentPort}
                       onChange={() => {}}
                       value={transhipmentPort}
                     />
@@ -671,7 +758,7 @@ const HBL = ({ props }) => {
                       type='text'
                       name=''
                       id=''
-                      value={etaPOD}
+                      value={etaPod}
                       className='bg-gray-300 py-2  border-2'
                     />
                   </div>

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import api from "../api/axiosInstance";
-import { hblUrl } from "../api/apiEndpoints";
+import { hblUrl, hblbyShipmentUrl } from "../api/apiEndpoints";
 
 export const createHbl = createAsyncThunk(
   "hblCreate",
@@ -11,6 +11,18 @@ export const createHbl = createAsyncThunk(
       return res.data;
     } catch (error) {
       rejectWithValue(error.message);
+    }
+  }
+);
+
+export const hblbyShipment = createAsyncThunk(
+  "hbl/byship",
+  async (data, { rejectWithValue }) => {
+    try {
+      const res = await api.post(hblbyShipmentUrl, data).then((res) => res.data);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -39,6 +51,18 @@ const hblSlice = createSlice({
       .addCase(createHbl.rejected, (state, { payload }) => {
         state.isError = true;
         state.errorMsg = payload;
+      }),
+
+    builder
+      .addCase(hblbyShipment.fulfilled, (state, action) => {
+        state.hblData = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(hblbyShipment.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(hblbyShipment.rejected, (state, action) => {
+        state.errorMsg = action.payload;
       }),
   ],
 });

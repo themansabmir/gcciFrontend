@@ -8,3 +8,4 @@ export const mblbyID ='api/mblbyid'
 export const hblUrl = "api/hbl"
 export const shipmentBytype = "api/shipmentbytype"
 export const mblbyShipmentid = "api/mblbyshipment";
+export const hblbyShipmentUrl ="api/hblbyshipment"

@@ -11,16 +11,12 @@ export const createMBL = createAsyncThunk(
   "mbl/create",
   async (mblData, thunkApi) => {
     try {
-      console.log(mblData)
-      let response = ""
-      console.log(mblData?._id)
+      console.log(mblData);
+      let response = "";
+      console.log(mblData?._id);
       if (mblData._id) {
-
-
-
-response = await api.put(mblUrl, mblData).then((res) => res.data);
+        response = await api.put(mblUrl, mblData).then((res) => res.data);
       } else {
-
         response = await api.post(mblUrl, mblData).then((res) => res.data);
       }
       return response;
@@ -72,13 +68,18 @@ const initialState = {
   error: "",
   mblData: [],
   respone: "",
+  similarFields: "",
   singleMBL: "",
 };
 
 const mblSlice = createSlice({
   name: "mbl",
   initialState,
-  reducers: {},
+  reducers: {
+    saveFields: (state, action) => {
+      state.similarFields = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createMBL.fulfilled, (state, action) => {
@@ -114,13 +115,19 @@ const mblSlice = createSlice({
         state.error = action.payload;
       });
 
-    builder.addCase(getMBLbyShipmentId.fulfilled, (state, action) => {
-      state.singleMBL = action.payload;
-    });
+    builder
+      .addCase(getMBLbyShipmentId.fulfilled, (state, action) => {
+        state.singleMBL = action.payload;
+      })
+      .addCase(getMBLbyShipmentId.pending, (state, action) => {
+        state.isLoading = action.payload;
+      });
   },
 });
 
 export const shipmentData = (state) => state?.mbl?.mblData;
 export const singleMBL = (state) => state?.mbl?.singleMBL;
+
+export const { saveFields } = mblSlice.actions;
 
 export default mblSlice.reducer;

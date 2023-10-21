@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import { searchCustomer } from "../../features/customerSlice";
 import { createMBL, getMBLbyShipmentId } from "../../features/mblSlice";
 
+import { saveFields } from "../../features/mblSlice";
+
 export const Field = ({
   props,
   name,
@@ -21,7 +23,6 @@ export const Field = ({
 
   // const { handleClick } = props;
 
-  console.log(name + address);
 
   const [result, setResult] = useState(name && name + address);
 
@@ -165,7 +166,7 @@ const MBL = () => {
     setMbl(data);
   };
   const addContainer = () => {
-    const container= {
+    const container = {
       containerNumber: "",
       containerType: "",
       pkgCount: "",
@@ -178,11 +179,10 @@ const MBL = () => {
       customsSeal: "",
       description: "",
       hsCode: "",
-    }
+    };
     const data = { ...mbl };
-    const newContainer = [...data.containerDetails, container]
-    data.containerDetails = newContainer
-
+    const newContainer = [...data.containerDetails, container];
+    data.containerDetails = newContainer;
 
     setMbl(data);
   };
@@ -209,22 +209,23 @@ const MBL = () => {
 
   const portsData = useSelector((state) => state.port.portData);
 
-  const fieldProps = 0;
+  const loader= useSelector((state) => state?.shipment?.isLoading)
+
   useEffect(() => {
     dispatch(getMBLbyShipmentId({ shipmentId: shipmentId })).then(
       ({ payload }) => {
-        console.log(payload);
         if (payload[0]?.containerDetails?.length > 0) {
-          console.log("Payload", payload);
           setMbl(payload[0]);
+          dispatch(saveFields(payload[0]));
         }
       }
     );
   }, [dispatch]);
+  if (loader)  return "Loading"
 
   return (
     <>
-      {mbl && (
+      {mbl ? (
         <div className='bg-gray-300 py-4'>
           <div className='mx-5 mb-4 '>
             <form onSubmit={() => submitHandler()}>
@@ -1098,7 +1099,7 @@ disabled={disableEdit}
 
           <div></div>
         </div>
-      )}
+      ):"Loading"}
     </>
   );
 };
