@@ -29,11 +29,23 @@ export const tasksByShipmentId = createAsyncThunk(
   }
 );
 
+export const getDepartments = createAsyncThunk(
+  "departments",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await api.get("api/department").then((res) => res.data);
+      return res.data;
+    } catch (error) {
+      rejectWithValue(error.message);
+    }
+  }
+);
 const initialState = {
   taskData: [],
   isLoading: false,
   isError: false,
-  response:""
+  departments: [],
+  response: "",
 };
 
 const taskSlice = createSlice({
@@ -51,17 +63,26 @@ const taskSlice = createSlice({
       });
 
     builder.addCase(updateTask.fulfilled, (state, action) => {
-      state.response= action.payload
+      state.response = action.payload;
       state.taskData = [...state.taskData].map((item) => {
-        if (item._id === action.payload._id) return action.payload
-        return item
+        if (item._id === action.payload._id) return action.payload;
+        return item;
+      });
+    });
+
+    builder
+      .addCase(getDepartments.fulfilled, (state, action) => {
+        state.departments = action.payload;
       })
-    })
+      .addCase(getDepartments.rejected, (state, action) => {
+        state.isError = action.payload;
+      });
   },
 });
 
+export const tasks = (state) => state?.task?.taskData;
+export const loader = (state) => state?.task?.isLoading;
 
-export const tasks = state => state?.task?.taskData
-export const loader= state=> state?.task?.isLoading
+export const departmentsData = state=> state?.task?.departments
 
 export default taskSlice.reducer;

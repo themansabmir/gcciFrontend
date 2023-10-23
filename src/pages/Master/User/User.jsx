@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { MasterNavbar } from "../../Navbar/Navbar";
+import { useDispatch, useSelector } from "react-redux";
+import Table from "../../../components/Table/Table";
 import {
   createEmployee,
   getAllEmployee,
 } from "../../../features/employeeSlice";
-import Table from "../../../components/Table/Table";
-import { Outlet } from "react-router-dom";
 
 // user employee component
 const User = () => {
@@ -88,19 +86,20 @@ const User = () => {
         {/* <MasterNavbar /> */}
         {/*  table section */}
         <div className='  '>
-          <button
+          {/* <button
             className='bg-green-600 px-3 py-2 inline uppercase text-white font-semibold'
             onClick={() => setSlider(!slider)}
           >
             {slider ? "Cancel" : "Add Employee"}
-          </button>
-          <div>
+          </button> */}
+          <div className="bg-white px-2 shadow-md py-2 mx-5 mt-10">
+            <h1 className="text-xl font-bold text-gray-900">Employees List</h1>
             {employees && <Table data={employees} columns={employeeColumns} />}
           </div>
         </div>
 
         {/*  form section  */}
-        <div className=' '>
+        {/* <div className=' '>
           <div
             className={
               slider
@@ -196,9 +195,9 @@ const User = () => {
               </div>
             </form>
           </div>
-        </div>
+        </div> */}
       </div>
- 
+
     </div>
   );
 };

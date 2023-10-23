@@ -6,8 +6,8 @@ module.exports = {
       colors: {
         mainBg: "#f9fafd",
         cardBg: "#ffffff",
-        sidebar: "#181818",
-       
+        sidebar: "#253042",
+
         font: "#25C935",
         secondaryFont: "#080c0d",
         fields: "#374151",

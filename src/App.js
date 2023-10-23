@@ -19,6 +19,7 @@ import Test from "./test/Test";
 import CreateCustomer from "./pages/Master/User/CreateCustomer";
 import ViewShipment from "./pages/Shipment/ViewShipment";
 import NewShipment from "./pages/Shipment/NewShipment";
+import Employees from "./pages/Employees/Employees";
 
 function App() {
   const [expand, setExpand] = useState(true);
@@ -38,6 +39,7 @@ function App() {
               <Route path='customers' element={<Customer />} />
               <Route path='createcustomer' element={<CreateCustomer />} />
             </Route>
+            <Route path="/employees" element={<Employees />} />
             <Route path='/shipment' element={""}>
               <Route index element={<ShipmentData />} />
               <Route path='createshipment' element={<CreateShipment />} />
