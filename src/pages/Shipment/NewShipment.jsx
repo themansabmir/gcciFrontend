@@ -81,7 +81,7 @@ const NewShipment = () => {
       <div className='grid grid-cols-2 '>
         <label htmlFor=''> Eta POD</label>
         <input
-          type='text'
+          type='date'
           className='border-[#C3C3C3] border-2 rounded px-3 py-1 '
           name='etaPod'
           value={shipment.etaPod}

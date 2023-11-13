@@ -9,7 +9,7 @@ import mblReducer from "../features/mblSlice";
 import hblReducer from "../features/hblSlice";
 import shipmentSlice from "../features/shipmentSlice";
 import taskSlice from "../features/taskSlice";
-
+import dashboardReducer from "../features/dashboardSlice";
 const store = configureStore({
   reducer: {
     mbl: mblReducer,
@@ -21,7 +21,8 @@ const store = configureStore({
     customer: customerReducer,
     hbl: hblReducer,
     shipment: shipmentSlice,
-    task: taskSlice
+    task: taskSlice,
+    dashboard: dashboardReducer,
   },
 });
 

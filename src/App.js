@@ -20,18 +20,35 @@ import CreateCustomer from "./pages/Master/User/CreateCustomer";
 import ViewShipment from "./pages/Shipment/ViewShipment";
 import NewShipment from "./pages/Shipment/NewShipment";
 import Employees from "./pages/Employees/Employees";
+import Login from "./pages/Login/Login";
+import { useSelector } from "react-redux";
+import { adminToken} from "./features/employeeSlice";
 
 function App() {
   const [expand, setExpand] = useState(true);
+
+const token =useSelector(adminToken)
+
+
+
   return (
     <div className='flex'>
+
       <BrowserRouter>
+
         <div className={`w-2/12 top-0 mr-[0.5px] flex`}>
-          <Sidebar expand={expand} setExpand={setExpand} />
+          {
+
+          token && <Sidebar expand={expand} setExpand={setExpand} />
+          }
+
         </div>
+
+        {token ?
+
         <div className={`w-10/12 bg-mainBg`}>
           <Routes>
-            <Route path='/' index element={<Dashboard />} />
+            <Route path='/' index element={token?  <Dashboard /> : <Login />} />
 
             <Route path='/masters' element={<MasterNavbar />}>
               <Route index element={<User />} />
@@ -39,22 +56,31 @@ function App() {
               <Route path='customers' element={<Customer />} />
               <Route path='createcustomer' element={<CreateCustomer />} />
             </Route>
-            <Route path="/employees" element={<Employees />} />
+            <Route path='/employees' element={<Employees />} />
             <Route path='/shipment' element={""}>
               <Route index element={<ShipmentData />} />
               <Route path='createshipment' element={<CreateShipment />} />
-              <Route path='createshipment/:shipmentId' element={<CreateShipment />} />
-              {/* <Route path="hbl" element={<HBL />} /> */}
               <Route
-                path='viewShipment/:mblId'
-                element={<ViewShipment />}
+                path='createshipment/:shipmentId'
+                element={<CreateShipment />}
               />
+              {/* <Route path="hbl" element={<HBL />} /> */}
+              <Route path='viewShipment/:mblId' element={<ViewShipment />} />
             </Route>
-            <Route path="/newShipment" element={<NewShipment />} />
+            <Route path='/newShipment' element={<NewShipment />} />
             <Route path='/settings' element={<Settings />}></Route>
             <Route path='/test' element={<Test />} />
           </Routes>
-        </div>
+          </div> :
+          <>
+            <Routes>
+
+
+          <Route path="/" element={<Login />} />
+            </Routes>
+          </>
+}
+
       </BrowserRouter>
       <ToastContainer />
     </div>

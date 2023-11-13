@@ -7,7 +7,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-const Table = ({ data, columns }) => {
+const Table = ({ data, columns , styles}) => {
   const [filter, setFilter] = useState("");
 
   const table = useReactTable({
@@ -56,7 +56,7 @@ const Table = ({ data, columns }) => {
             <tr
               key={row.id}
 
-              className='border-b border-b-gray-300 hover:border-l-8  hover:border-l-green-500 last:border-0 hover:bg-gray-50 cursor-pointer  '
+              className={styles? styles :'border-b border-b-gray-300 hover:border-l-8  hover:border-l-green-500 last:border-0 hover:bg-gray-50 cursor-pointer  '}
             >
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id} className='py-2 font-normal px-4'>

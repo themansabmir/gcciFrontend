@@ -7,6 +7,7 @@ const AddEmployee = () => {
   const dispatch = useDispatch();
   const [showModal, setShow] = useState(false);
   const department = useSelector(departmentsData);
+  const [selectedDept, setDepartments] = useState(Array.from(department).fill(null));
   const [employee, setEmployee] = useState({
     fullname: "",
     username: "",
@@ -37,6 +38,7 @@ const AddEmployee = () => {
       username,
       password,
       role,
+      selectedDept
     };
     dispatch(createEmployee(employeeData));
 
@@ -45,11 +47,68 @@ const AddEmployee = () => {
   const permissions = ["Read", "Write", "Update", "Delete"];
 
 
-  const [departments, setDepartments] = useState([])
 
-  const handleDepartment = (index, ) => {
-
+const deptHandler = (e, departmentName) => {
+  const isChecked = e.target.checked;
+  if (isChecked) {
+    setDepartments((prevDepartments) => [
+      ...prevDepartments,
+      {
+        departmentName,
+        permissions: [],
+      },
+    ]);
+  } else {
+    setDepartments((prevDepartments) =>
+      prevDepartments.filter(
+        (department) => department.departmentName !== departmentName
+      )
+    );
   }
+};
+
+
+
+ const handlePermissionChange = (e, departmentName, permission) => {
+   const isChecked = e.target.checked;
+   setDepartments((prevDepartments) =>
+     prevDepartments.map((department) => {
+       if (department.departmentName === departmentName) {
+         if (isChecked) {
+           return {
+             ...department,
+             permissions: [...department.permissions, permission],
+           };
+         } else {
+           return {
+             ...department,
+             permissions: department.permissions.filter(
+               (p) => p !== permission
+             ),
+           };
+         }
+       }
+       return department;
+     })
+   );
+ };
+
+
+
+
+
+
+
+
+
+
+  console.log("selectedDept", selectedDept);
+  const permissionHandler = (
+    dept,
+    deptIndex,
+    permission,
+    permissionIndex
+  ) => {};
 
   useEffect(() => {
     dispatch(getDepartments());
@@ -60,11 +119,13 @@ const AddEmployee = () => {
         <div className='fixed bg-black w-full min-h-screen top-0 justify-center items-center flex  left-0 bg-opacity-80'>
           <div className='bg-white flex flex-col gap-2 list-none w-4/12  px-4 py-3  '>
             <div className='flex justify-between'>
-              <h1 className="text-xl font-bold text-gray-900">Departments</h1>
-              <span className="cursor-pointer"onClick={()=> setShow(false)}>X</span>
+              <h1 className='text-xl font-bold text-gray-900'>Departments</h1>
+              <span className='cursor-pointer' onClick={() => setShow(false)}>
+                X
+              </span>
             </div>
             {department &&
-              department.map((item,departmentIndex) => {
+              department.map((item, departmentIndex) => {
                 return (
                   <div key={departmentIndex}>
                     <div className='flex gap-2'>
@@ -72,6 +133,7 @@ const AddEmployee = () => {
                         type='checkbox'
                         name='departmentName'
                         value={item.departmentName}
+                        onChange={(e) => deptHandler(e,item._id,)}
                       />{" "}
                       <p>{item.departmentName}</p>
                     </div>
@@ -82,6 +144,7 @@ const AddEmployee = () => {
                             <input
                               type='checkbox'
                               name='permissions'
+                              onChange={(e) => handlePermissionChange(e, item._id,permission)}
                               id=''
                               value={permission}
                             />{" "}

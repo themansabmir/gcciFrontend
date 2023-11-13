@@ -8,6 +8,7 @@ module.exports = {
         cardBg: "#ffffff",
         sidebar: "#253042",
 
+        sidebarHover:"",
         font: "#25C935",
         secondaryFont: "#080c0d",
         fields: "#374151",
