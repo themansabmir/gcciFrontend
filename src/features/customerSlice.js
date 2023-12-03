@@ -5,6 +5,8 @@ import { customerUrl } from "../api/apiEndpoints";
 
 
 
+
+
 export const createCustomer = createAsyncThunk(
   "customer/create",
     async (customerData, thunkAPI) => {
@@ -61,5 +63,8 @@ const customerSlice = createSlice({
       })
     }
 })
+
+
+export const customersData = (state) => state?.customer?.customerData;
 
 export default customerSlice.reducer

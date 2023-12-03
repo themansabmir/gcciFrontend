@@ -11,3 +11,9 @@ export const mblbyShipmentid = "api/mblbyshipment";
 export const hblbyShipmentUrl = "api/hblbyshipment";
 export const updateTaskUrl = "api/task";
 export const shipmentBydate = "api/shipmentbydate";
+
+export const insight = "api/";
+export const createInsight = "api/addInsights";
+export const getInsightbydates = "api/getInsightByDate";
+export const getinsightByCustomer = "api/getInsightByCustomer";
+export const getinsightByPorts = "api/getInsightByPorts";

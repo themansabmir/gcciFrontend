@@ -74,6 +74,26 @@ const Sidebar = ({expand, setExpand}) => {
           </NavLink>
         </li>
 
+        <li className='hover:bg-font rounded flex items-center  justify-center hover:scale-[0.9] transition-all duration-200 ease-in font-semibold '>
+          <NavLink
+            to={"/insight"}
+            style={({ isActive }) => ({
+              width: "100%",
+              padding: "5px",
+              color: isActive ? "#181818" : secondColor ,
+
+              background: isActive ? "#25C935" : "transparent",
+              paddingTop: "5px",
+              paddingBottom: "5px",
+              ":hover": { background: "red" },
+            })}
+          >
+            <li className='flex items-center  gap-2'>
+              <GiCargoShip /> Insights
+            </li>
+          </NavLink>
+        </li>
+
         <li className='mt-auto '>
           <li className='hover:bg-font  flex items-center  justify-center hover:scale-[0.9] transition-all duration-200 ease-in font-semibold rounded'>
             <NavLink

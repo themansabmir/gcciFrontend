@@ -1,64 +1,60 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import {getPorts, createPort} from '../../features/portSlice'
-import Table from '../../components/Table/Table'
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Table from "../../components/Table/Table";
+import { createPort, getPorts } from "../../features/portSlice";
 const Port = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const ports = useSelector(state=> state.port.portData)
-
+  const ports = useSelector((state) => state.port.portData);
 
   const [portData, setPortData] = useState({
     portName: "",
-    portCode:""
-  })
-
+    portCode: "",
+  });
 
   const handleChange = (e) => {
-setPortData({...portData, [e.target.name]:e.target.value})
-  }
+    setPortData({ ...portData, [e.target.name]: e.target.value });
+  };
 
   const portHandler = (e) => {
-    e.preventDefault()
-    dispatch(createPort(portData))
+    e.preventDefault();
+    dispatch(createPort(portData));
 
     setPortData({
       portName: "",
-      portCode:""
-    })
+      portCode: "",
+    });
+  };
 
-  }
-
-
-    const portColumns = [
-      {
-        header: "ID",
-        accessorKey: "",
-        cell: ({ row }) => <span>{row.index + 1}</span>,
-      },
-      {
-        header: "Port Name",
-        accessorKey: "portName",
-      },
-      {
-        header: "Port Code",
-        accessorKey: "portCode",
-      },
-      {
-        header: "Actions",
-        accessorKey: "",
-        cell: ({ row }) => (
-          <div>
-            <button>Edit</button>
-            <button>Delete</button>
-          </div>
-        ),
-      },
-    ];
+  const portColumns = [
+    {
+      header: "ID",
+      accessorKey: "",
+      cell: ({ row }) => <span>{row.index + 1}</span>,
+    },
+    {
+      header: "Port Name",
+      accessorKey: "portName",
+    },
+    {
+      header: "Port Code",
+      accessorKey: "portCode",
+    },
+    {
+      header: "Actions",
+      accessorKey: "",
+      cell: ({ row }) => (
+        <div>
+          <button>Edit</button>
+          <button>Delete</button>
+        </div>
+      ),
+    },
+  ];
 
   useEffect(() => {
-    dispatch(getPorts())
-  },[dispatch])
+    dispatch(getPorts());
+  }, []);
   return (
     <div className='grid grid-cols-3 ml-2 mt-2'>
       {/* port form   */}
@@ -119,6 +115,6 @@ setPortData({...portData, [e.target.name]:e.target.value})
       </div>
     </div>
   );
-}
+};
 
-export default Port
+export default Port;

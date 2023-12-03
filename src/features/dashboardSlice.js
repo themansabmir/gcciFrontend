@@ -11,6 +11,7 @@ export const getShipmentsbyDate = createAsyncThunk(
       return res.data;
     } catch (error) {
       return rejectWithValue(error.message);
+      
     }
   }
 );
