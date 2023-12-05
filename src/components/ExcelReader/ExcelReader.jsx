@@ -25,10 +25,10 @@ const customKeys = [
   "customerId",
 ];
 
-const ExcelReader = () => {
+const ExcelReader = ({customers}) => {
   const dispatch = useDispatch();
 
-  const customers = useSelector(customersData);
+  // const customers = useSelector(customersData);
 
   const [file, setFile] = useState("");
   const [customer, setCustomer] = useState("");
@@ -40,7 +40,7 @@ const ExcelReader = () => {
 
 
     const data = file.map((item) => ({ ...item, customerId: customer }));
-    
+
     dispatch(createInsights(data));
   };
 
