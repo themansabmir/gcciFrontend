@@ -47,7 +47,9 @@ export const getInsightByPortsData = createAsyncThunk(
         destinationData: destData.data,
         journeyData: journeyData.data,
       };
-    } catch (error) {}
+    } catch (error) {
+      return rejectWithValue(error)
+    }
   }
 );
 

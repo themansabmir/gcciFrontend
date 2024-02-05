@@ -1,11 +1,15 @@
 import React from "react";
-import { NavLink, Outlet , } from "react-router-dom";
+import { NavLink, Outlet, } from "react-router-dom";
+
 
 const Navbar = () => {
   return <div className='pb-8 text-3xl  border-b-2  '>Navbar</div>;
 };
 
 export default Navbar;
+
+
+
 
 export const MasterNavbar = () => {
   return (
@@ -22,7 +26,8 @@ export const MasterNavbar = () => {
         >
           {" "}
           Users
-        </NavLink>
+          </NavLink>
+
         <NavLink
           style={({ isActive }) => ({
             color: isActive ? "#fff" : "#fff",
@@ -126,7 +131,7 @@ export const ShipmentNavbar = () => {
             {" "}
             Create Shipment
           </NavLink>
-      
+
         </nav>
       </div>
       <Outlet />

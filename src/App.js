@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Dashboard from "./pages/Dashboard/Dashboard";
 
@@ -22,6 +22,7 @@ import ShipmentData from "./pages/Shipment/ShipmentData";
 import ViewShipment from "./pages/Shipment/ViewShipment";
 import Test from "./test/Test";
 import Insight from "./pages/Insight/Insight";
+import { SidebarComponent } from "./SidebarComponent";
 
 function App() {
   const [expand, setExpand] = useState(true);
@@ -32,16 +33,16 @@ function App() {
     <div className='flex'>
       <BrowserRouter>
         <div className={`w-2/12 top-0 mr-[0.5px] flex`}>
-          {token || true && <Sidebar expand={expand} setExpand={setExpand} />}
+          {token && <Sidebar expand={expand} setExpand={setExpand} />}
         </div>
 
-        {token || true? (
+        {token ? (
           <div className={`w-10/12 bg-mainBg`}>
             <Routes>
               <Route
                 path='/'
                 index
-                element={token|| true ? <Dashboard /> : <Login />}
+                element={token || true ? <Dashboard /> : <Login />}
               />
 
               <Route path='/masters' element={<MasterNavbar />}>
@@ -61,10 +62,11 @@ function App() {
                 {/* <Route path="hbl" element={<HBL />} /> */}
                 <Route path='viewShipment/:mblId' element={<ViewShipment />} />
               </Route>
-              <Route path="/insight"  element={<Insight />} />
+              <Route path='/insight' element={<Insight />} />
               <Route path='/newShipment' element={<NewShipment />} />
               <Route path='/settings' element={<Settings />}></Route>
               <Route path='/test' element={<Test />} />
+              <Route path="/sidebarcom" element={<SidebarComponent />} />
             </Routes>
           </div>
         ) : (
