@@ -215,7 +215,7 @@ const MBL = () => {
   useEffect(() => {
     dispatch(getMBLbyShipmentId({ shipmentId: shipmentId })).then(
       ({ payload }) => {
-        if (payload[0]?.containerDetails?.length > 0) {
+        if (payload?.[0]?.containerDetails?.length > 0) {
           const data = deepClone(payload[0]);
 
           setMbl(data);
@@ -229,8 +229,12 @@ const MBL = () => {
   return (
     <>
       {mbl ? (
-        <div className='bg-gray-300 py-4'>
-          <div className='mx-5 mb-4 '>
+        <div className="bg-gray-100">
+
+          <div className='   py-1'>
+
+        </div>
+          <div className=' mx-5 px-5 mb-4 bg-white'>
             <form onSubmit={() => submitHandler()}>
               {/* shipment modes  */}
               <div className='grid grid-cols-5 gap-12 '>

@@ -23,6 +23,7 @@ import ViewShipment from "./pages/Shipment/ViewShipment";
 import Test from "./test/Test";
 import Insight from "./pages/Insight/Insight";
 import { SidebarComponent } from "./SidebarComponent";
+import AddEmployee from "./pages/Employees/AddEmployee";
 
 function App() {
   const [expand, setExpand] = useState(true);
@@ -32,12 +33,12 @@ function App() {
   return (
     <div className='flex'>
       <BrowserRouter>
-        <div className={`w-2/12 top-0 mr-[0.5px] flex`}>
+        <div className={` top-0 mr-[0.5px] flex`}>
           {token && <Sidebar expand={expand} setExpand={setExpand} />}
         </div>
 
         {token ? (
-          <div className={`w-10/12 bg-mainBg`}>
+          <div className={`w-full bg-mainBg`}>
             <Routes>
               <Route
                 path='/'
@@ -45,28 +46,38 @@ function App() {
                 element={token || true ? <Dashboard /> : <Login />}
               />
 
-              <Route path='/masters' element={<MasterNavbar />}>
-                <Route index element={<User />} />
-                <Route path='users' element={<User />} />
-                <Route path='customers' element={<Customer />} />
-                <Route path='createcustomer' element={<CreateCustomer />} />
-              </Route>
+              {/* Masters Drop down */}
+              <Route path='/masters/customers' element={<Customer />} />
+              <Route path='/masters/employees' element={<User />} />
+              <Route path='/masters/createEmployee' element={<AddEmployee />} />
+              <Route
+                path='/masters/createcustomer'
+                element={<CreateCustomer />}
+              />
               <Route path='/employees' element={<Employees />} />
-              <Route path='/shipment' element={""}>
-                <Route index element={<ShipmentData />} />
-                <Route path='createshipment' element={<CreateShipment />} />
-                <Route
-                  path='createshipment/:shipmentId'
-                  element={<CreateShipment />}
-                />
-                {/* <Route path="hbl" element={<HBL />} /> */}
-                <Route path='viewShipment/:mblId' element={<ViewShipment />} />
-              </Route>
+
+              {/* Shipment DropDown */}
+              <Route path='/shipments' element={<ShipmentData />} />
+
+              <Route
+                path='/shipments/createshipment'
+                element={<CreateShipment />}
+              />
+              <Route
+                path='/shipments/createshipment/:shipmentId'
+                element={<CreateShipment />}
+              />
+              {/* <Route path="hbl" element={<HBL />} /> */}
+              <Route
+                path='/shipments/viewShipment/:mblId'
+                element={<ViewShipment />}
+              />
+
               <Route path='/insight' element={<Insight />} />
-              <Route path='/newShipment' element={<NewShipment />} />
+              <Route path='/shipments/newShipment' element={<NewShipment />} />
               <Route path='/settings' element={<Settings />}></Route>
               <Route path='/test' element={<Test />} />
-              <Route path="/sidebarcom" element={<SidebarComponent />} />
+              <Route path='/sidebarcom' element={<SidebarComponent />} />
             </Routes>
           </div>
         ) : (

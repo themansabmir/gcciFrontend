@@ -6,7 +6,7 @@ const Master = () => {
 
   return (
       <div>
-      <MasterNavbar />
+      {/* <MasterNavbar /> */}
 
 
 
