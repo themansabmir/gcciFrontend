@@ -6,7 +6,7 @@ module.exports = withMT({
   theme: {
     extend: {
       colors: {
-        mainBg: "#f9fafd",
+        mainBg: "#f9f9f9",
         cardBg: "#ffffff",
         sidebar: "#253042",
 

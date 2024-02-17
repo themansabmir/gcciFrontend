@@ -122,6 +122,11 @@ export const otherRoutes = [
         icon: "",
         path: "/settings/currency",
       },
+      {
+        name: "Customer Types",
+        icon: "",
+        path:"/customerType"
+      }
     ],
   },
   {

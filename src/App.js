@@ -24,6 +24,9 @@ import Test from "./test/Test";
 import Insight from "./pages/Insight/Insight";
 import { SidebarComponent } from "./SidebarComponent";
 import AddEmployee from "./pages/Employees/AddEmployee";
+import { ViewCustomer } from "./pages/Master/User/ViewCustomer";
+import { CreateCustomertype } from "./pages/CustomerType/CreateCustomertype";
+import { CustomerType } from "./pages/CustomerType/CustomerType";
 
 function App() {
   const [expand, setExpand] = useState(true);
@@ -49,11 +52,25 @@ function App() {
               {/* Masters Drop down */}
               <Route path='/masters/customers' element={<Customer />} />
               <Route path='/masters/employees' element={<User />} />
+              <Route
+                path='/masters/view/:customerId'
+                element={<ViewCustomer />}
+              />
+
               <Route path='/masters/createEmployee' element={<AddEmployee />} />
               <Route
                 path='/masters/createcustomer'
                 element={<CreateCustomer />}
               />
+
+              {/* customer type */}
+
+              <Route path='customerType' element={<CustomerType />} />
+              <Route
+                path='/customertype-create'
+                element={<CreateCustomertype />}
+              />
+
               <Route path='/employees' element={<Employees />} />
 
               {/* Shipment DropDown */}
